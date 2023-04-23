@@ -40,7 +40,7 @@ Your users should be able to:
 ### Links
 
 - Solution : [here](https://github.com/duquerson/country_api)
-- Live Site : [here](https://country_api.vercel.app)
+- Live Site : [here](https://country-api-psi.vercel.app/)
 
 ## My process
 
