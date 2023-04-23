@@ -1,47 +1,68 @@
-# Svelte + Vite
+# Frontend Mentor - REST Countries API with color theme switcher
 
-This template should help get you started developing with Svelte in Vite.
+![Design preview for the REST Countries API with color theme switcher coding challenge](./desing/desktop-preview.jpg)
 
-## Recommended IDE Setup
+## Welcome! 👋
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+Thanks for checking out this front-end coding challenge.
 
-## Need an official Svelte framework?
+**To do this challenge, you need a good understanding of HTML, CSS, and JavaScript.**
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Table of contents
 
-## Technical considerations
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+  - [Built with](#built-with)
+  
+- [Author](#author)
 
-**Why use this over SvelteKit?**
+## The challenge
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+Your challenge is to integrate with the [REST Countries API](https://restcountries.com) to pull country data and display it like in the designs.
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+Your users should be able to:
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+- See all countries from the API on the homepage
+- Search for a country using an `input` field
+- Filter countries by region
+- Click on a country to see more detailed information on a separate page
+- Click through to the border countries on the detail page
+- Toggle the color scheme between light and dark mode *(optional)*
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+### Screenshot
 
-**Why include `.vscode/extensions.json`?**
+![preview Desktop](./desing/desktop-design-home-light.jpg)
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
 
-**Why enable `checkJs` in the JS template?**
+![preview Mobile](./desing/mobile-design-home-light.jpg)
+### Links
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
+- Solution : [here](https://github.com/duquerson/country_api)
+- Live Site : [here](https://country_api.vercel.app)
 
-**Why is HMR not preserving my local component state?**
+## My process
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
+### Built with
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+- Svelte
+- Flexbox
+- CSS Grid
+- Mobile-first workflow
+- JS
 
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+
+## Author
+
+- GitHub - [Duquerson](https://github.com/stars/duquerson/lists/challenges-frontend)
+- Frontend Mentor - [Duquerson](https://www.frontendmentor.io/profile/yeyosoto)
+
+## Connect with me
+
+<p align="left">
+<a href="https://linkedin.com/in/duquerson" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="www.linkedin.com/in/duquerson" height="60" width="70" /></a>
+</p>
+
+**It was fun to build it!**. 🚀
+If you like the code follow me. 👋
