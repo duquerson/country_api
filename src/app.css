@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --text-color-dark: "hsl(0, 0%, 100%)";
+        --menu-color-light: "hsl(0, 0%, 98%)";
+        --color-light: 'hsl(0, 0%, 52%)';
+        --text-color-light: 'hsl(200, 15%, 8%)';
+        --menu-color-dark: 'hsl(209, 23%, 22%)';
+        --color-dark: 'hsl(207, 26%, 17%)';
+    }
+    body{
+        font-family: 'Nunito Sans', 'sans-serif';
+    }
+    
+    
+}
