@@ -1,7 +1,9 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import Image from './ImageLazzyDetalles.svelte';
     import Borders from './Borders.svelte';
     export let country = {};
+    
     let click = false;
     const dispatch = createEventDispatcher();
     const backhistory = ()=>{
@@ -10,7 +12,6 @@
     const updateCountry = (event)=>{
         country = event.detail;
     };
-
 </script>
 <section class="bg-color-light bg-opacity-5 pt-10 dark:bg-color-dark dark:text-text-color-dark w-screen h-full">
     <button on:click={backhistory} class="flex w-[110px] ml-8 h-[34px] mb-[70px] align-baseline items-center justify-center bg-white dark:bg-menu-color-dark dark:text-text-color-dark  font-medium rounded-xs shadow-black shadow-2xl ">
@@ -20,9 +21,7 @@
         Back
     </button>
     <div class=" h-full w-screen lg:flex  lg:px-8">
-        <figure class="flex flex-col items-center lg:justify-top lg:mt-8">
-            <img src={country.flag} alt={`Flag of ${country.name}`}>
-        </figure>
+        <Image countryFlag={country.flag} countryName={country.name}></Image>
         <div class="flex flex-col mx-10 ">
             <h2 class="text-2xl font-bold mb-6 mt-[50px]">{country.name}</h2>
             <div class="lg:flex lg:flex-row lg:text-md">

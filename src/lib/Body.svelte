@@ -3,7 +3,7 @@
     import Details from './Details.svelte';
     const API = 'https://restcountries.com/v3.1/';
     import axios from 'axios';
-    
+    import Image from './ImageLazzy.svelte';
     import { onMount } from 'svelte';
     let initCountries = ['Germany', 'United States of America', 'Brasil', 'Iceland', 'Afghanistan', 'Åland Islands', 'Albania', 'Algeria' ];
     let detailCountries = [];
@@ -62,16 +62,15 @@
         <div class="component1 ">
             <Header on:selectcontinent={dato}/>
         </div>
+        
         {#await detailCountries}
-            <div>Loanding.... </div>
+            <div class="component2 w-screen h-full grid grid-cols-1 grid-rows-8 lg:grid-cols-4 lg:grid-rows-2 lg:gap-8 justify-items-center gap-12 pt-3 bg-opacity-5 dark:bg-color-dark dark:text-text-color-dark animate-pulse bg-gray-200 shadow-2xl"></div>
         {:then data}
             <div class="component2 w-screen grid grid-cols-1 grid-rows-8 lg:grid-cols-4 lg:grid-rows-2 lg:gap-8 justify-items-center gap-12 pt-3 bg-color-light bg-opacity-5 dark:bg-color-dark dark:text-text-color-dark">
                 {#each data as country}
                     <section class=" h-[560px] w-[348px] mx-4 mb-4 rounded-lg shadow-lg dark:bg-menu-color-dark">
                         <button on:click={()=>handleDetails(country)}>
-                            <figure class="h-[276px] w-full">
-                                <img class="imgCountry rounded-t-lg " src={country.flag} alt={`Flag of ${country.name}`}>
-                            </figure>
+                            <Image countryFlag={country.flag} countryName={country.name}></Image>
                             <div class="mx-7 mt-12">
                                 <h2 class="mb-4 font-bold text-2xl">{country.name}</h2>
                                 <div class="text-lg mt-8">
@@ -91,10 +90,6 @@
 </div>
 
 <style>
-    .imgCountry{
-        width: 375px;
-        height: 276px;
-    }
     .container{
         position: absolute;
         top: 140px;
