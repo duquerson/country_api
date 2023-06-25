@@ -23,9 +23,8 @@
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
 				const image = entry.target.querySelector("img");
-				if(!image.src){
-					image.src= countryFlag;
-				}
+				
+                image.src= countryFlag;
 				image.removeAttribute("data-src");
 				createObserver.unobserve(entry.target);
 			}

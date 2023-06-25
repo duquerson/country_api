@@ -66,23 +66,43 @@
         {#await detailCountries}
             <div class="component2 w-screen h-full grid grid-cols-1 grid-rows-8 lg:grid-cols-4 lg:grid-rows-2 lg:gap-8 justify-items-center gap-12 pt-3 bg-opacity-5 dark:bg-color-dark dark:text-text-color-dark animate-pulse bg-gray-200 shadow-2xl"></div>
         {:then data}
-            <div class="component2 w-screen grid grid-cols-1 grid-rows-8 lg:grid-cols-4 lg:grid-rows-2 lg:gap-8 justify-items-center gap-12 pt-3 bg-color-light bg-opacity-5 dark:bg-color-dark dark:text-text-color-dark">
-                {#each data as country}
-                    <section class=" h-[560px] w-[348px] mx-4 mb-4 rounded-lg shadow-lg dark:bg-menu-color-dark">
-                        <button on:click={()=>handleDetails(country)}>
-                            <Image countryFlag={country.flag} countryName={country.name}></Image>
-                            <div class="mx-7 mt-12">
-                                <h2 class="mb-4 font-bold text-2xl">{country.name}</h2>
-                                <div class="text-lg mt-8">
-                                    <p class="mb-2"><span class="font-semibold">Population:</span> {country.population}</p>
-                                    <p class="mb-2"><span class="font-semibold">Region:</span> {country.region}</p>
-                                    <p class="mb-2"><span class="font-semibold">Capital:</span> {country.capital}</p>
-                                </div>
-                            </div>
-                        </button>
-                    </section>
+            {#if data.length <= 3}
+                {#each data as country}    
+                        <div class="component2 mx-auto ">
+                            <section class=" h-[560px] w-[348px] mx-4 mb-4 rounded-lg shadow-lg dark:bg-menu-color-dark">
+                                <button on:click={()=>handleDetails(country)}>
+                                    <Image countryFlag={country.flag} countryName={country.name}></Image>
+                                    <div class="mx-7 mt-12">
+                                        <h2 class="mb-4 font-bold text-2xl">{country.name}</h2>
+                                        <div class="text-lg mt-8">
+                                            <p class="mb-2"><span class="font-semibold">Population:</span> {country.population}</p>
+                                            <p class="mb-2"><span class="font-semibold">Region:</span> {country.region}</p>
+                                            <p class="mb-2"><span class="font-semibold">Capital:</span> {country.capital}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </section>
+                        </div>
                 {/each}
-            </div>
+            {:else}
+                    {#each data as country}    
+                        <div class="component2 w-screen grid grid-cols-1 grid-rows-8 lg:grid-cols-4 lg:grid-rows-2 lg:gap-8 justify-items-center gap-12 pt-3 bg-color-light bg-opacity-5 dark:bg-color-dark dark:text-text-color-dark">
+                            <section class=" h-[560px] w-[348px] mx-4 mb-4 rounded-lg shadow-lg dark:bg-menu-color-dark">
+                                <button on:click={()=>handleDetails(country)}>
+                                    <Image countryFlag={country.flag} countryName={country.name}></Image>
+                                    <div class="mx-7 mt-12">
+                                        <h2 class="mb-4 font-bold text-2xl">{country.name}</h2>
+                                        <div class="text-lg mt-8">
+                                            <p class="mb-2"><span class="font-semibold">Population:</span> {country.population}</p>
+                                            <p class="mb-2"><span class="font-semibold">Region:</span> {country.region}</p>
+                                            <p class="mb-2"><span class="font-semibold">Capital:</span> {country.capital}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </section>
+                        </div>
+                    {/each}
+                {/if}
         {:catch error}
             <p>Error: {error.message}</p>
         {/await}
