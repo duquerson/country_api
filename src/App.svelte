@@ -15,8 +15,13 @@
   {#if currentRoute === "/"}
     <p>inico</p>
   {:else if currentRoute === "/:search"}
-    busqueda
+    <p>search</p>
   {:else}
     <P404 />
   {/if}
 </main>
+<style>
+	:global(body){
+		font-family: 'Plus Jakarta Sans', sans-serif;
+	}
+</style>
