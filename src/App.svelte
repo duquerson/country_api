@@ -17,6 +17,7 @@
   {:else if currentRoute === "/:search"}
     <p>search</p>
   {:else}
+
     <P404 />
   {/if}
 </main>
