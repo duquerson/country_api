@@ -1,31 +1,27 @@
 <script>
     import {createEventDispatcher} from 'svelte';
-    
-    const API = 'https://restcountries.com/v3.1/';
-    import axios from 'axios';
-    const axio = axios.create({
-        baseURL: `${API}`
-    });
-    const dispatch = createEventDispatcher();
+	import {API} from './readableStore';
+
     let value = '';
     const searchValue = async (value)=>{
             try {
-                const {data} = await axio(`name/${value}`);
-                
-                dispatch('search', data);
+				const promise = await fetch(`${API}${value}`);
+				if(!promise.ok){
+					throw new Error(`Error ${promise.status}: Failed Connection to Server`);
+				}
+				const response = await promise.json();
+				console.log(response);
             } catch (error) {
                 console.error(error);
             };
         };
     const search = (event)=>{
         value = event.target.value;
-        
         if(value.length > 2 ){
             searchValue(value);
-            
         }
     }
-    
+
 </script>
 
 

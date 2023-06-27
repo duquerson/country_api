@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import Header from "./template/Header.svelte";
   import P404 from "./lib/404.svelte";
+  import ListSearch from "./lib/List_search.svelte";
 
   let currentRoute = "";
   const handleRouteChange = () => {
@@ -13,7 +14,7 @@
 <main>
   <Header />
   {#if currentRoute === "/"}
-    <p>inico</p>
+    <ListSearch/>
   {:else if currentRoute === "/:search"}
     <p>search</p>
   {:else}
