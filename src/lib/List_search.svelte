@@ -16,8 +16,7 @@
 	section{
 
 		padding-top: 20px;
-		padding-left: 16px;
-		padding-right: 16px;
+
 	}
 
 </style>
