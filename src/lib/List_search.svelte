@@ -14,9 +14,11 @@
 
 <style>
 	section{
-
 		padding-top: 20px;
-
+		padding-left: 16px;
+		padding-right: 16px;
+		position: relative;
+		z-index: 1;
 	}
 
 </style>

@@ -11,7 +11,7 @@
 
 </script>
 <header class=" bg-white text-text-color-light dark:bg-menu-color-dark dark:text-text-color-dark h-[130px] w-screen flex flex-col justify-center px-4 shadow-lg">
-    <nav class="flex justify-between ">
+    <nav class="flex justify-between px-4">
         <h1 class="font-extrabold text-sm"><a href="/" class="text-lg">Where in the world?</a></h1>
         <div class="flex font-medium text-sm">
             {#if mode}

@@ -1,19 +1,9 @@
 <script>
-	//This code is importing the `onMount` and `afterUpdate` functions from the Svelte library,
-	//defining some variables and options, and setting up an IntersectionObserver to
-	//lazy load an image when it becomes visible in the viewport.
-	//The `countryFlag` variable is passed in as a prop and used as the source for the image.
-	//The `imgContainer` variable is used to reference the container element for the image.
-	//The `imageLoaded` variable is used to track whether the image has finished loading.
-	//The `loadImg` function is called when the IntersectionObserver detects that the container
-	//element is visible in the viewport, and it sets the `src` attribute of the image to `countryFlag` and
-	//removes the `data-src` attribute. The `createObserver` variable is used to store the IntersectionObserver
-	//instance, and it is set up in the `onMount` lifecycle function and updated in the `afterUpdate` lifecycle function.
 	import { onMount, afterUpdate } from "svelte";
 	let imgContainer;
 	let imageLoaded=false;
 	export let countryFlag;
-    export let countryName;
+    export let countryAlt;
 	const options = {
 		root: null,
 		rootMargin: "0px",
@@ -23,8 +13,9 @@
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
 				const image = entry.target.querySelector("img");
-				
-                image.src= countryFlag;
+				if(!image.src) {
+					image.src = countryFlag;
+				}
 				image.removeAttribute("data-src");
 				createObserver.unobserve(entry.target);
 			}
@@ -40,16 +31,19 @@
 	afterUpdate(()=>createObserver.observe(imgContainer));
 </script>
 
-<figure bind:this={imgContainer} class="h-[276px] w-full">
+<figure bind:this={imgContainer} class="h-max-[160px] rounded-t-lg mb-7">
 	{#if !imageLoaded}
-		<div class="w-[270px] h-[270px] animate-pulse bg-gray-200 shadow-2xl"></div>
+		<div class="w-[270px] h-max-[160px] animate-pulse bg-gray-200 border-light-800"></div>
 	{/if}
-	<img class="imgCountry rounded-t-lg" on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={`flag of ${countryName}`} decoding="async" loading="lazy" />
+	<img class="imgCountry rounded-t-lg" on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={countryAlt} decoding="async" loading="lazy" />
 </figure>
 
 <style>
+	img {
+		max-width: 270px;
+	}
     .imgCountry{
-        width: 375px;
-        height: 276px;
+		aspect-ratio: 16/9; /*16/9*/
+		object-fit: cover;
     }
 </style>
