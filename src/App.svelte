@@ -15,7 +15,6 @@
 <main>
   <Header />
   {#if currentRoute === "/"}
-
 	<ListSearch/>
 	<Body/>
   {:else if currentRoute === "/:search"}
@@ -28,4 +27,5 @@
 	:global(body){
 		font-family: 'Plus Jakarta Sans', sans-serif;
 	}
+
 </style>

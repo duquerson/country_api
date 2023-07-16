@@ -7,6 +7,7 @@ const QueryAPI = async (endpoint) => {
 			)
 		}
 		const response = await promise.json()
+
 		return response
 	} catch (error) {
 		console.error(error)

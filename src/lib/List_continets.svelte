@@ -14,7 +14,7 @@
     }
 </script>
 
-<section class="flex flex-row flex-nowrap lg:w-[200px] max-w-[400px] h-[60px] justify-between  bg-white dark:bg-menu-color-dark dark:text-white rounded-lg shadow-lg">
+<section class="flex flex-row flex-nowrap lg:w-[200px] max-w-[440px] h-[60px] justify-between  bg-white dark:bg-menu-color-dark dark:text-white rounded-lg shadow-lg">
     <button on:click={toggle} class="text-sm pl-6 h-[60px]">
         <span  class="flex">
             {#if select}
