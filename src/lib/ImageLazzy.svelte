@@ -1,7 +1,8 @@
 <script>
 	import { onMount, afterUpdate } from "svelte";
+	import { fade } from 'svelte/transition';
 	let imgContainer;
-	let imageLoaded=false;
+
 	export let countryFlag;
     export let countryAlt;
 	const options = {
@@ -31,19 +32,13 @@
 	afterUpdate(()=>createObserver.observe(imgContainer));
 </script>
 
-<figure bind:this={imgContainer} class="h-max-[160px] rounded-t-lg mb-7">
-	{#if !imageLoaded}
-		<div class="w-[270px] h-max-[160px] animate-pulse bg-gray-200 border-light-800"></div>
-	{/if}
-	<img class="imgCountry rounded-t-lg" on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={countryAlt} decoding="async" loading="lazy" />
+<figure bind:this={imgContainer} class="rounded-t-lg">
+	<img class="h-[170px] w-full rounded-t-lg " transition:fade on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={countryAlt} decoding="async" loading="lazy" />
 </figure>
 
 <style>
 	img {
-		max-width: 270px;
-	}
-    .imgCountry{
-		aspect-ratio: 16/9; /*16/9*/
 		object-fit: cover;
-    }
+	}
+
 </style>
