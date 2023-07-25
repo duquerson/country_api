@@ -11,15 +11,14 @@
 		<ListContinets/>
 	</div>
 </section> -->
-<article class=" bg-menu-color-light dark:bg-color-dark flex lg:flex-row flex-col">
-
-
-</article>
+<div class="Container__submenu">
+	<div class="container__submenu--items">
+		<Search/>
+		<ListContinets/>
+	</div>
+</div>
 <style>
-	article{
-		height: 200px;
-		width: 100%;
-	}
+
 	/* section{
 		padding-top: 20px;
 		padding-left: 16px;
