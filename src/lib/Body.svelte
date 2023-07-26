@@ -24,7 +24,6 @@
 			<Card on:load={(event)=>{loadButton=event.detail.load}} {country}/>
 		{/each}
 	{/await}
-
 </div>
 
 <style>

@@ -1,6 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
-	import ImageLazzy from './ImageLazzy.svelte';
+	import ImageLazy from './ImageLazy.svelte';
 	import { createEventDispatcher } from 'svelte';
 	export let country;
 	const dispatch = createEventDispatcher();
@@ -10,7 +10,7 @@
 		<!-- <figure class="rounded-t-lg ">
 			<img class="h-[170px] w-full rounded-t-lg" src={country.flags.png}  alt={country.flags.alt} >
 		</figure> -->
-		<ImageLazzy countryFlag={country.flags.png} countryAlt={country.flags.alt}/>
+		<ImageLazy countryFlag={country.flags.png} countryAlt={country.flags.alt}/>
 		<article class="flex flex-col mb-9">
 			<h2 class="mx-6 mt-6 mb-4">{country.name.common}</h2>
 			<p class="mx-6 mb-1"><span class=" mr-1 mb-4">Population: </span> {country.population.toLocaleString('en-US')}</p>

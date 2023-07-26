@@ -1,5 +1,5 @@
 <script>
-	import ListContinets from './List_continets.svelte';
+	import ListContinents from './List_continents.svelte';
 	import Search from './Search.svelte';
 </script>
 
@@ -8,23 +8,24 @@
 		<Search/>
 	</div>
 	<div class="mt-4 lg:mt-0">
-		<ListContinets/>
+		<ListContinents/>
 	</div>
 </section> -->
-<div class="Container__submenu">
-	<div class="container__submenu--items">
+<div class="container__submenu lg:h-[100px] h-[180px] bg-menu-color-light dark:bg-color-dark">
+	<div class="container__submenu--items flex lg:flex-row flex-col justify-between">
 		<Search/>
-		<ListContinets/>
+		<ListContinents/>
 	</div>
 </div>
 <style>
-
-	/* section{
+	.container__submenu{
+		width: 100%;
+	}
+	.container__submenu--items{
 		padding-top: 20px;
 		padding-left: 16px;
 		padding-right: 16px;
-		position: relative;
-		z-index: 1;
-	} */
+	}
+
 
 </style>
