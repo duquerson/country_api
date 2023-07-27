@@ -24,7 +24,7 @@
                     </svg>
                 {/if}
             <button on:click={handleMode} class="ml-2 cursor-pointer font-extrabold">
-                {mode ? 'ligth Mode' : 'Dark Mode'}
+                {mode ? 'light Mode' : 'Dark Mode'}
             </button>
         </div>
     </nav>

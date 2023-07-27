@@ -13,8 +13,10 @@
 </section> -->
 <div class="container__submenu lg:h-[100px] h-[180px] bg-menu-color-light dark:bg-color-dark">
 	<div class="container__submenu--items flex lg:flex-row flex-col justify-between">
-		<Search/>
-		<ListContinents/>
+		<Search on:search/>
+		<div>
+			<ListContinents/>
+		</div>
 	</div>
 </div>
 <style>

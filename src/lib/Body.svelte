@@ -9,7 +9,7 @@
 	if(!parameters){
 		parameters = `${$API}all`;
 	}
-
+	//arregalr busquedas no hacer consulta api en busquedas solo enviar parametros
 	</script>
 
 <div class="w-full bg-menu-color-light flex gap-[16px] overflow-hidden pt-6 flex-wrap mx-[17px] justify-items-center justify-center dark:bg-color-dark dark:text-white ">

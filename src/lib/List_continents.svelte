@@ -28,16 +28,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
     </div>
-	{#if listOpen}
-		<ul class="container__select lg:w-[200px] w-[400px] mt-4 bg-white dark:bg-menu-color-dark dark:text-white flex flex-col rounded-lg shadow-lg">
-			{#each continents as continent}
-				<button on:click={()=>selectContinent(continent)}>
-					<li class="text-left hover:bg-color-light hover:bg-opacity-5 hover:dark:bg-color-dark hover:rounded-lg p-4 pl-6 text-sm">{continent}</li>
-				</button>
-			{/each}
-		</ul>
-	{/if}
 </div>
+{#if listOpen}
+	<ul class="container__select lg:w-[200px] w-[400px] mt-4 bg-white dark:bg-menu-color-dark dark:text-white flex flex-col rounded-lg shadow-lg">
+		{#each continents as continent}
+			<button on:click={()=>selectContinent(continent)}>
+				<li class="text-left hover:bg-color-light hover:bg-opacity-5 hover:dark:bg-color-dark hover:rounded-lg p-4 pl-6 text-sm">{continent}</li>
+			</button>
+		{/each}
+	</ul>
+{/if}
 
 
 <style>

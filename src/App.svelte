@@ -15,8 +15,8 @@
 <main>
   <Header />
   {#if currentRoute === "/"}
-	<ListSearch/>
-	<Body/>
+	<ListSearch on:search/>
+	<!-- <Body/> -->
   {:else if currentRoute === "/:search"}
     <p>search</p>
   {:else}

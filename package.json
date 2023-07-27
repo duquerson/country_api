@@ -24,6 +24,7 @@
     "extends": "./node_modules/eslint-config-standard/.eslintrc.json"
   },
   "dependencies": {
+    "dompurify": "^3.0.5",
     "pnpm": "^7.33.2"
   }
 }
