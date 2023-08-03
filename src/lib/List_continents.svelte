@@ -4,7 +4,7 @@
     let continents = ['Africa', 'America', 'Asia', 'Europa', 'Oceania'];
     let listOpen = false;
     let select = '';
-
+	//reacondicinar el codigo del button mejorar los hover y el click en cualquier parte del button
     const toggle = ()=>{
         listOpen = !listOpen;
     }
