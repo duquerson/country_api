@@ -44,7 +44,7 @@
 		object-fit: cover;
 	}
 	.efects{
-		width: 280px;
+		width: 270px;
 		height: 170px;
 		border-radius: 3%;
 		animation-duration: 2s;

@@ -12,8 +12,8 @@
 		if(value.length > 3){
 			setTimeout(()=>{
 			country = `${$API}name/${value}`;
-			dispatch('search', {country: country});
-			}, 290);
+			dispatch('search', {country: country, value: value});
+			}, 1000);
 		}
     }
 
@@ -26,7 +26,7 @@
 			</svg>
 		</div>
 		<label for="search">
-			<input bind:value on:input={search} class=" pl-2 h-[60px] w-[350px] dark:bg-menu-color-dark dark:text-text-color-dark dark:placeholder-text-color-dark" type="search" name="search" id="search" placeholder="Search for a country...">
+			<input bind:value on:input={search} class="pl-2 h-[60px] w-[350px] dark:bg-menu-color-dark dark:text-text-color-dark dark:placeholder-text-color-dark" type="search" name="search" id="search" placeholder="Search for a country...">
 		</label>
 	</form>
 </div>
