@@ -34,16 +34,20 @@
 
 <figure bind:this={imgContainer} class="rounded-t-lg">
 	{#if !imageLoaded}
-		<div class="efects"></div>
+		<div class="effects"></div>
 	{/if}
-	<img class="h-[170px] w-full rounded-t-lg " transition:fade on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={countryAlt} decoding="async" loading="lazy" />
+	<img class="rounded-t-lg " transition:fade on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={countryAlt} decoding="async" loading="lazy" />
 </figure>
 
 <style>
+
 	img {
+
 		object-fit: cover;
+		width: 100%;
+		height: 170px;
 	}
-	.efects{
+	.effects{
 		width: 270px;
 		height: 170px;
 		border-radius: 3%;

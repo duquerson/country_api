@@ -2,6 +2,7 @@
     import { API } from './readableStore';
 	import Card from './Card.svelte';
 	import QueryAPI from './Query';
+	import Error404 from './404.svelte';
 	let numElements = 12;
 	let elements = Array.from({ length: numElements }, (_, i) => i + 1);
 	export let parameters = '';
@@ -27,6 +28,8 @@
 				<Card on:load={(event)=>{loadButton=event.detail.load}} {country}/>
 			{/each}
 		</div>
+	{:catch error}
+		<Error404 />
 	{/await}
 </div>
 

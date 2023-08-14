@@ -1,54 +1,57 @@
 <script>
-  import { onMount } from "svelte";
-  import Header from "./template/Header.svelte";
-  import P404 from "./lib/404.svelte";
-  import ListSearch from "./lib/List_search.svelte";
-  import Body from "./lib/Body.svelte";
+	import { onMount } from "svelte";
+	import Header from "./template/Header.svelte";
+	import P404 from "./lib/404.svelte";
+	import ListSearch from "./lib/List_search.svelte";
+	import Body from "./lib/Body.svelte";
+	import { element } from "svelte/internal";
 
-	//arreglar el router y rutas
-  let country ='';
-	let value = '';
-  let currentRoute = '';
-  let url='';
-  const handleRouteChange = () => {
-    currentRoute = window.location.pathname;
-  };
-  const handleSearch = (event)=>{
-	country = event.detail.country;
-	value = event.detail.value;
-	url = window.location.hash = value;
-	window.location.pathname = 'search';
-	window.history.pushState(null, null, 'search');
-	console.log(url);
-    handleRouteChange();
-  }
-	const handleList = (event)=>{
+	let country = "";
+	let currentRoute = "";
+	let visitedRoutes = [];
+
+	const routes = {
+		"/": [ListSearch, Body],
+		"/search": [ListSearch, Body],
+		"/region": [ListSearch, Body],
+	};
+	const getRoute = () =>
+		location.hash.slice(1).toLocaleLowerCase().split("/")[1] || "/";
+
+	const resolveRoutes = (route) => {
+		const validRoutes = Object.keys(routes);
+		let matchingRoute = route;
+		for (const validRoute of validRoutes) {
+			if (validRoute.includes(route)) {
+				matchingRoute = validRoute;
+			}
+		}
+		return matchingRoute;
+	};
+	const handleRouteChange = () => {
+		currentRoute = window.location.pathname;
+		let hash = getRoute();
+		let rut = resolveRoutes(hash);
+		let result = routes[rut] ? routes[rut] : P404;
+		console.log(result);
+	};
+
+	const handleEvents = (event) => {
 		country = event.detail.country;
-		value = event.detail.value;
-
-		window.history.pushState(null, null, value);
-		//window.history.pushState(null, null, value);
 		handleRouteChange();
-	}
-  onMount(() => handleRouteChange());
+	};
+
+	onMount(handleRouteChange);
 </script>
 
 <main>
-  <Header />
-  {#if currentRoute === "/"}
-    <ListSearch on:search={handleSearch} on:select={handleList} />
-    <Body parameters={country} />
-  {:else if currentRoute === '/search'}
-  	<ListSearch on:search={handleSearch} on:select={handleList} />
-    <Body parameters={country} />
-  {:else}
-    <P404 />
-  {/if}
-
+	<Header />
+	<ListSearch on:search={handleEvents} on:select={handleEvents} />
+	<Body parameters={country} />
 </main>
-<style>
-	:global(body){
-		font-family: 'Plus Jakarta Sans', sans-serif;
-	}
 
+<style>
+	:global(body) {
+		font-family: "Plus Jakarta Sans", sans-serif;
+	}
 </style>

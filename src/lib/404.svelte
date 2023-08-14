@@ -15,8 +15,6 @@
 		font-size: 70px;
 		font-weight: 800;
 		background-color: transparent;
-		z-index: 1;
 		margin-top: -38%;
-
 	}
 </style>
