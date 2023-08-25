@@ -53,14 +53,11 @@
 		class="container__select lg:w-[200px] w-[410px] mt-4 ml-3 bg-white dark:bg-menu-color-dark dark:text-white flex flex-col rounded-lg shadow-lg"
 	>
 		{#each continents as continent}
-			<li
-				class="text-left hover:bg-color-light hover:bg-opacity-5 hover:dark:bg-color-dark hover:rounded-lg p-4 pl-6 text-sm"
-			>
-				<a
-					href={`#/region/${continent}`}
-					on:click={() => selectContinent(continent)}>{continent}</a
-				>
-			</li>
+
+			<button on:click={()=>selectContinent(continent)}>
+				<li class="text-left hover:bg-color-light hover:bg-opacity-5 hover:dark:bg-color-dark hover:rounded-lg p-4 pl-6 text-sm">{continent}</li>
+			</button>
+
 		{/each}
 	</ul>
 {/if}

@@ -4,13 +4,14 @@
 	import { createEventDispatcher } from 'svelte';
 	export let country;
 	const dispatch = createEventDispatcher();
+	const nameCountry = country.name.common.split(' ').join('_');
 </script>
 <div>
 	<button transition:fade on:load={() => (dispatch('load',{loadButton: true}))} class="w-[270px] h-[350px] bg-white dark:bg-menu-color-dark rounded-lg shadow-2xl">
 		<!-- <figure class="rounded-t-lg ">
 			<img class="h-[170px] w-full rounded-t-lg" src={country.flags.png}  alt={country.flags.alt} >
 		</figure> -->
-		<a href="#/detail/{country.name.common}">
+		<a href="/detail/{nameCountry}">
 			<ImageLazy countryFlag={country.flags.svg} countryAlt={country.flags.alt}/>
 			<article class="flex flex-col mb-9">
 				<h2 class="mx-6 mt-6 mb-4">{country.name.common}</h2>

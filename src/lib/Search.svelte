@@ -12,19 +12,11 @@
 		if (value.trim() !== "") {
 			const data = { country: `${$API}name/${value}` };
 			dispatch("search", data);
-			// const searchParams = new URLSearchParams();
-			// searchParams.set('search', value);
-			// const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-			// window.history.pushState({}, '', newUrl);
-			const searchParams = new URLSearchParams();
-			searchParams.set("search", value);
-			const newUrl = `/${searchParams.toString()}`;
-			window.location.hash = newUrl;
+		}else{
+			const data = {country: ''};
+			dispatch("search", data);
 		}
-		// const hashValue = window.location.hash.slice(2); // Eliminar '#/'
-		// console.log(hashValue);
-    	// const matches = hashValue.match(/^search=(.*)$/);
-		// console.log(matches);
+
 	};
 </script>
 
