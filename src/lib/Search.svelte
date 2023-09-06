@@ -4,16 +4,15 @@
 	import Dompurify from "dompurify";
 
 	let value = "";
-	let country = "";
 	const dispatch = createEventDispatcher();
 	const search = () => {
 		value = Dompurify.sanitize(value).toLowerCase();
 
 		if (value.trim() !== "") {
-			const data = { country: `${$API}name/${value}` };
+			const data = { params: `${$API}name/${value}` };
 			dispatch("search", data);
 		}else{
-			const data = {country: ''};
+			const data = {params: ''};
 			dispatch("search", data);
 		}
 

@@ -1,22 +1,35 @@
 <script>
-	import { onMount } from "svelte";
-	import Header from "./template/Header.svelte";
-	import P404 from "./lib/404.svelte";
-	import ListSearch from "./lib/List_search.svelte";
-	import Body from "./lib/Body.svelte";
-	let country = "";
+
+
+import queryParams from './lib/writableStore';
+import {Router, Route} from 'svelte-routing';
+
+import Header from "./template/Header.svelte";
+import ListSearch from "./lib/List_search.svelte";
+import Page404 from "./lib/404.svelte";
+import Details from './lib/Details.svelte';
+import Body from "./lib/Body.svelte";
+//no con eventos no cons storage usar leer pathname el nombre del pais y hacer consulta del nombre del pais y mostrar datos
+
+
 	const handleEvents = (event) => {
-		country = event.detail.country;
+		queryParams.set(event.detail.params);
 	};
-
-
 
 </script>
 
 <main>
 	<Header />
-	<ListSearch on:search={handleEvents} on:select={handleEvents} />
-	<Body parameters={country} />
+	<Router>
+		<Route path='/'>
+			<ListSearch on:search={handleEvents} on:select={handleEvents} />
+			<Body />
+		</Route>
+		<Route path='/detail/:id'>
+			<Details />
+		</Route>
+		<Route path='*' component={Page404}/>
+	</Router>
 </main>
 
 <style>

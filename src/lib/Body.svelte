@@ -3,18 +3,18 @@
 	import Card from './Card.svelte';
 	import QueryAPI from './Query';
 	import Error404 from './404.svelte';
+	import queryParams from './writableStore';
 	let numElements = 12;
 	let elements = Array.from({ length: numElements }, (_, i) => i + 1);
-	export let parameters = '';
 	let loadButton= false;
-	if(!parameters){
-		parameters = `${$API}all`;
+	if(!$queryParams){
+		queryParams.set(`${$API}all`);
 	}
 
 	</script>
 
 <div class="w-full h-full bg-menu-color-light dark:bg-color-dark dark:text-white pb-[130px]">
-	{#await QueryAPI(parameters)}
+	{#await QueryAPI($queryParams)}
 		<div class=" spaces pt-4">
 			{#each elements as Element }
 				{#if !loadButton}
@@ -25,7 +25,7 @@
 	{:then Countries}
 		<div class=" spaces pt-4 ">
 			{#each Countries as country}
-				<Card on:load={(event)=>{loadButton=event.detail.load}} {country}/>
+				<Card on:Country on:load={(event)=>{loadButton=event.detail.load}} {country}/>
 			{/each}
 		</div>
 	{:catch error}

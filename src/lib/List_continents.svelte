@@ -1,6 +1,7 @@
 <script>
 	import { API } from "./readableStore.js";
 	import { createEventDispatcher } from "svelte";
+
 	let continents = ["Africa", "America", "Asia", "Europa", "Oceania"];
 	let listOpen = false;
 	let select = "";
@@ -10,7 +11,7 @@
 	};
 	const selectContinent = (continent) => {
 		select = continent;
-		const data = { country: `${$API}region/${continent.toLowerCase()}` };
+		const data = { params: `${$API}region/${continent.toLowerCase()}` };
 		dispatch("select", data);
 		toggle();
 	};
