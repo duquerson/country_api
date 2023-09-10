@@ -15,7 +15,7 @@
 
 </script>
 
-<div class="flex flex-wrap ml-10 mt-3 mb-3 gap-2 lg:mt-0 lg:mb-6">
+<div class="flex flex-wrap lg:ml-10 mt-3 mb-3 gap-2 lg:mt-0 lg:mb-6">
     {#each borders as country}
         {#await QueryAPI(`${$API}alpha/${country}`)}
             loading

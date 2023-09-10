@@ -29,13 +29,14 @@
 		createObserver.observe(imgContainer);
 		return () => createObserver.unobserve(imgContainer);
 	});
-    
+
 	afterUpdate(()=>{createObserver.observe(imgContainer)});
 </script>
 
-<figure bind:this={imgContainer} class="flex flex-col items-center lg:justify-top lg:mt-8">
+<figure bind:this={imgContainer} class="flex flex-col items-center lg:justify-top lg:mt-2">
 	{#if !imageLoaded}
-		<div class="w-[300px] h-[300px] animate-pulse bg-gray-200 shadow-2xl"></div>
+		<div class="w-[300px] h-[300px] animate-pulse bg-gray-200"></div>
 	{/if}
 	<img on:load={() => (imageLoaded = true)} data-src={countryFlag} alt={`flag of ${countryName}`} decoding="async" loading="lazy" />
 </figure>
+

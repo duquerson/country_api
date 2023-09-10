@@ -19,7 +19,7 @@
 
 <button
 	on:click={toggle}
-	class="mt-4 lg:mt-0 ml-3 flex flex-row flex-nowrap lg:w-[200px] w-[410px] h-[60px] justify-between bg-white dark:bg-menu-color-dark dark:text-white rounded-lg shadow-lg"
+	class="mt-4 lg:mt-0 ml-3 flex flex-row flex-nowrap lg:w-[200px] w-[330px] h-[60px] justify-between bg-white dark:bg-menu-color-dark dark:text-white rounded-lg shadow-lg"
 >
 	<div class="text pt-4 pl-4 pr-5">
 		<span>
@@ -51,7 +51,7 @@
 
 {#if listOpen}
 	<ul
-		class="container__select lg:w-[200px] w-[410px] mt-4 ml-3 bg-white dark:bg-menu-color-dark dark:text-white flex flex-col rounded-lg shadow-lg"
+		class="container__select lg:w-[200px] w-[330px] mt-4 ml-3 bg-white dark:bg-menu-color-dark dark:text-white flex flex-col rounded-lg shadow-lg"
 	>
 		{#each continents as continent}
 

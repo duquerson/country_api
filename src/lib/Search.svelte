@@ -20,7 +20,7 @@
 </script>
 
 <div
-	class="h-[60px] w-[410px] ml-3 bg-white dark:bg-menu-color-dark dark:text-white rounded-xl"
+	class="h-[60px] w-[316px] lg:w-[420px] ml-3 bg-white dark:bg-menu-color-dark dark:text-white rounded-xl"
 >
 	<form class="search" on:submit|preventDefault={search}>
 		<div class="my-auto ml-2">
@@ -42,7 +42,7 @@
 		<label for="search">
 			<input
 				bind:value
-				class="pl-2 h-[60px] w-[350px] dark:bg-menu-color-dark dark:text-text-color-dark dark:placeholder-text-color-dark"
+				class="pl-2 h-[60px] w-[270px] lg:w-[370px] dark:bg-menu-color-dark dark:text-text-color-dark dark:placeholder-text-color-dark"
 				type="search"
 				name="search"
 				id="search"
