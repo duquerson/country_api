@@ -103,6 +103,6 @@ test.describe('Country API', () => {
 
   test('404 page on invalid route', async ({ page }) => {
     await page.goto('/nonexistent');
-    await expect(page.getByText(/404/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: '404' })).toBeVisible({ timeout: 10000 });
   });
 });
