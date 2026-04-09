@@ -1,0 +1,96 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../presentation/components/Header.vue';
+import '../app.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Explore countries around the world' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script is:inline>
+      // Theme initialization - prevent FOUC
+      const storedTheme = localStorage.getItem('atlas-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="../assets/earth-americas.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <Header client:load />
+    <main class="grow w-full max-w-[1400px] mx-auto" transition:name="main">
+      <slot />
+    </main>
+    <script is:inline>
+      // Scroll to top on navigation
+      document.addEventListener('astro:page-load', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(body) {
+    /* Smooth scrolling for anchor links */
+    scroll-behavior: smooth;
+  }
+
+  :global(::view-transition-old(main)) {
+    animation: atlas-page-out 250ms cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+  }
+
+  :global(::view-transition-new(main)) {
+    animation: atlas-page-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes atlas-page-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes atlas-page-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(::view-transition-old(main)),
+    :global(::view-transition-new(main)) {
+      animation: none !important;
+    }
+    :global(body) {
+      scroll-behavior: auto !important;
+    }
+  }
+</style>

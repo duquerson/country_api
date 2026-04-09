@@ -1,21 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;800&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@fontsource/nunito-sans/300.css";
+@import "@fontsource/nunito-sans/600.css";
+@import "@fontsource/nunito-sans/800.css";
 
-@layer base {
-    :root {
-        --text-color-dark: "hsl(0, 0%, 100%)";
-        --menu-color-light: "hsl(0, 0%, 98%)";
-        --color-light: 'hsl(0, 0%, 52%)';
-        --text-color-light: 'hsl(200, 15%, 8%)';
-        --menu-color-dark: 'hsl(209, 23%, 22%)';
-        --color-dark: 'hsl(207, 26%, 17%)';
-    }
-    body{
-        font-family: 'Nunito Sans', 'sans-serif';
-    }
-    
-    
+@theme {
+  --color-surface: #FFFFFF;
+  --color-bg:      #FAFAFA;
+  --color-text:    #111517;
+  --color-muted:   #858585;
+  --color-terracotta: #C47D5F;
+  --color-sage: #7A8B6E;
+
+  --font-sans: 'Nunito Sans', sans-serif;
+
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dark {
+  --color-surface: #2B3945;
+  --color-bg:      #202C37;
+  --color-text:    #FFFFFF;
+  --color-muted:   #FFFFFF;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s, color 0.2s;
 }
