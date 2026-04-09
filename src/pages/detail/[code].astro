@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CountryDetail from '../../presentation/components/CountryDetail.vue';
+import CountryRepositoryImpl from '../../infrastructure/repositories/CountryRepositoryImpl';
+
+const { code } = Astro.params;
+let countryName = code?.toUpperCase() || '';
+
+if (code) {
+  try {
+    const country = await CountryRepositoryImpl.getCountryByCode(code);
+    countryName = country.name.common;
+  } catch {
+    // Keep default if not found
+  }
+}
+---
+
+<BaseLayout 
+  title={`${countryName} - Country Details`}
+  description={`View detailed information about ${countryName}, including population, capital, currencies, languages, and bordering countries.`}
+>
+  <CountryDetail client:load code={code || ''} />
+</BaseLayout>

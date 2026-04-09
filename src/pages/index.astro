@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ListSearch from '../presentation/components/ListSearch.vue';
+---
+
+<BaseLayout 
+  title="Where in the world?"
+  description="Search and explore countries from around the world. Filter by region, view detailed information, and discover borders."
+>
+  <ListSearch client:load />
+</BaseLayout>
