@@ -52,6 +52,10 @@ export const countrySummarySchema = z.object({
 export const countryListSchema = z.array(countrySchema);
 export const countrySummaryListSchema = z.array(countrySummarySchema);
 
+export type Country = z.infer<typeof countrySchema>;
+export type CountrySummaryFromApi = z.infer<typeof countrySummarySchema>;
+export type CountrySummaryParsed = z.infer<typeof countrySummaryListSchema>;
+
 export function safeParseCountrySummaryList(data: unknown) {
   return countrySummaryListSchema.safeParse(data);
 }

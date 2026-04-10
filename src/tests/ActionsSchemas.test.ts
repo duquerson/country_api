@@ -37,9 +37,9 @@ describe('Actions - Input Validation Schemas', () => {
     });
 
     it('should validate real country codes from data.json', () => {
-      mockCountries.slice(0, 10).forEach(country => {
+      mockCountries.slice(0, 10).forEach((country: any) => {
         const result = schemas.countryCodeSchema.safeParse({ code: country.cca3 });
-        expect(result.success).toBe(true).toBe(true);
+        expect(result.success).toBe(true);
       });
     });
   });
@@ -72,8 +72,8 @@ describe('Actions - Input Validation Schemas', () => {
     });
 
     it('should validate real country names from data.json', () => {
-      const realCountryNames = mockCountries.slice(0, 5).map(c => c.name.common.toLowerCase());
-      realCountryNames.forEach(name => {
+      const realCountryNames = mockCountries.slice(0, 5).map((c: any) => c.name.common.toLowerCase());
+      realCountryNames.forEach((name: string) => {
         const result = schemas.searchQuerySchema.safeParse({ query: name });
         expect(result.success).toBe(true);
       });
@@ -117,9 +117,9 @@ describe('Actions - Input Validation Schemas', () => {
     });
 
     it('should validate real regions from data.json', () => {
-      const realRegions = [...new Set(mockCountries.map(c => c.region))];
-      realRegions.forEach(region => {
-        const result = schemas.regionSchema.safeParse({ region });
+      const realRegions = [...new Set(mockCountries.map((c: any) => c.region))];
+      realRegions.forEach((region: any) => {
+        const result = schemas.regionSchema.safeParse({ region: region as any });
         expect(result.success).toBe(true);
       });
     });
@@ -155,7 +155,7 @@ describe('Actions - Input Validation Schemas', () => {
     });
 
     it('should parse all countries from data.json as summaries', () => {
-      mockCountries.forEach(country => {
+      mockCountries.forEach((country: any) => {
         const summary = {
           cca3: country.cca3,
           name: { common: country.name.common },

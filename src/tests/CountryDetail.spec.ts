@@ -33,7 +33,7 @@ const CountryDetailTest = defineComponent({
     async fetchCountry() {
       try {
         const countries = getMockCountries();
-        this.country = countries.find(c => c.cca3 === 'ESP' || c.name.common === 'Spain');
+        this.country = countries.find((c: any) => c.cca3 === 'ESP' || c.name.common === 'Spain');
       } catch {
         this.error = true;
       } finally {

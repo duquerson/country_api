@@ -22,7 +22,7 @@ const CountryBodyTest = defineComponent({
   `,
   data(): { countries: CountrySummary[]; loading: boolean; error: boolean } {
     return {
-      countries: getMockCountries().map(c => ({
+      countries: getMockCountries().map((c: any) => ({
         cca3: c.cca3,
         common: c.name.common,
         capital: c.capital,
