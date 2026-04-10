@@ -1,5 +1,5 @@
 import type { CountryRepository } from '../interfaces/Repository';
-import type { Country } from '../domain/Country';
+import type { Country } from '../domain/types';
 
 /**
  * Use case for retrieving a country by its ISO code

@@ -2,85 +2,67 @@
 
 ![Astro][astro-badge] ![Vue][vue-badge] ![Tailwind][tailwind-badge] ![TypeScript][ts-badge]
 
-Aplicación web para explorar países del mundo usando la REST Countries API.
+Aplicación web para explorar países del mundo usando la REST Countries API, construida con una arquitectura Clean simplificada y optimizada para SSR.
 
 ## ✨ Features
 
-- 🔍 Búsqueda de países por nombre
-- 🌍 Filtrado por región (Africa, Americas, Asia, Europe, Oceania)
-- 📄 Página de detalles por país
-- 🌐 Países fronterizos
-- 🌓 Modo claro/oscuro
-- ♿ Accesibilidad completa (ARIA, keyboard navigation)
-- 📱 Diseño responsive
-- ⚡ View Transitions para navegación fluida
-- 💾 Caché en memoria para rendimiento
-- 🧪 Suite de tests completa
+- 🔍 Búsqueda de países por nombre y filtrado por región (combinados)
+- 📄 Página de detalles por país con hidratación de países fronterizos
+- 🌓 Modo claro/oscuro con detección de sistema
+- ♿ Accesibilidad completa (ARIA, navegación por teclado)
+- 📱 Diseño responsive "Mobile First"
+- ⚡ SSR (Server-Side Rendering) para carga inicial instantánea y SEO
+- 💾 Caché inteligente en infraestructura para rendimiento óptimo
+- 🧪 Suite de tests automatizada (Unit & E2E)
 
-## 🏗️ Arquitectura
+## 🏗️ Arquitectura (Clean Architecture Simplificada)
+
+La arquitectura ha sido refinada para evitar el boilerplate excesivo y centralizar la lógica de negocio:
 
 ```
 src/
-├── actions/           # Server actions (driver)
-├── core/             # Domain (DDD + Hexagonal)
-│   ├── domain/       # Entidades, schemas, tipos
-│   ├── interfaces/  # Puertos
-│   ├── services/   # Manejo de errores
-│   └── use-cases/ # Casos de uso
-├── infrastructure/   # Adaptadores
-│   ├── cache/      # Cache en memoria
-│   ├── config/     # Configuración API
-│   ├── http/      # HTTP con retry
-│   └── repositories/
-├── presentation/    # UI
-│   ├── components/
-│   └── composables/
-├── pages/          # Rutas Astro
-└── layouts/       # Layouts
+├── core/             # Core Domain (SSOT)
+│   ├── domain/       # Types, Schemas (Zod) y Errors centralizados
+│   ├── interfaces/   # Ports (Repository definitions)
+│   └── use-cases/    # Unified Business Logic (e.g. GetCountries)
+├── infrastructure/   # Data Adapters
+│   ├── cache/        # In-memory optimization
+│   ├── http/         # Core fetch con Retry & Timeout logic
+│   └── repositories/ # Implementaciones concretas del API
+├── presentation/    # Presentation Layer
+│   ├── components/   # Vue components (Atomic design-ish)
+│   └── composables/  # Hooks reactivos (useAsync generic wrapper)
+├── actions/          # Astro / Server Actions (Bridges)
+├── pages/            # Astro Routes (SSR Entry points)
+└── layouts/          # Base layouts
 ```
 
-**Regla**: dependencias apuntan hacia adentro (actions → use-cases → puertos → adaptadores).
+### Principios de Refactorización:
+- **Centralización**: Tipos, esquemas de validación y manejo de errores consolidados en `src/core/domain`.
+- **Simplificación**: Unificación de casos de uso (GetAll, Search, Filter) en un único selector de lógica.
+- **Reducción de Boilerplate**: Uso de `useAsync` genérico para manejar estados de carga y error en la UI.
+- **Optimización SSR**: Los datos iniciales se recuperan en el servidor (`index.astro`) eliminando el "layout shift" inicial.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Astro 6 (SSR)
+- **Framework**: Astro 6 (SSR Mode)
 - **UI**: Vue 3 (Composition API)
 - **Styling**: Tailwind CSS v4
-- **Types**: TypeScript 5.6
-- **Validation**: Zod 4
+- **Validation**: Zod (Centralizado)
 - **Testing**: Vitest + Playwright
 
 ## 📦 Scripts
 
 ```bash
-pnpm dev          # Iniciar servidor de desarrollo
-pnpm build        # Build de producción
-pnpm test         # Tests unitarios
-pnpm test:run     # Tests unitarios (single run)
-pnpm e2e          # Tests E2E con Playwright
-pnpm typecheck    # Verificación de tipos
+pnpm dev          # Desarrollo
+pnpm build        # Build para Vercel/Node
+pnpm test         # Tests unitarios (Vitest)
+pnpm e2e          # Tests de integración (Playwright)
 ```
-
-## 🧪 Testing
-
-- **Unit Tests**: 80 tests con Vitest
-- **E2E Tests**: 11 tests con Playwright
-
-## 🔐 Seguridad
-
-- Validación de input con Zod schemas
-- Sanitización de búsquedas
-- Timeout y retry en requests HTTP
-- CSP headers y security meta tags
-- Validación de URLs externas
 
 ## 📄 Licencia
 
 MIT
-
-## 👤 Autor
-
-Duquerson - [GitHub](https://github.com/duquerson) - [Frontend Mentor](https://www.frontendmentor.io/profile/yeyosoto)
 
 ---
 
