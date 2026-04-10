@@ -14,3 +14,6 @@ export const getFirstCurrency = (country: Country): string => {
 export const getLanguages = (country: Country): string => {
     return country.languages ? Object.values(country.languages).join(', ') : 'N/A';
 };
+
+export const formatNumber = (num: number): string =>
+    new Intl.NumberFormat('en-US').format(num);

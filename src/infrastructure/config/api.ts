@@ -34,3 +34,9 @@ export const COUNTRY_FIELDS = {
   DETAIL:
     'name,capital,region,population,flags,cca3,borders,currencies,languages,subregion,tld,nativeName',
 };
+
+export const HTTP_TIMEOUTS = {
+    STANDARD: 10000,
+    RETRIES: 3,
+    RETRY_DELAY: 1000,
+};

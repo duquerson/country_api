@@ -7,15 +7,14 @@ import {
 } from '../../core/domain/schemas';
 
 import { fetchWithRetry } from '../http/fetchWithRetry';
-import { API_URL, COUNTRY_FIELDS } from '../config/api';
-import { HTTP_TIMEOUTS } from '../config/http';
+import { API_URL, COUNTRY_FIELDS, HTTP_TIMEOUTS } from '../config/api';
 import { getCached, setCache } from '../cache/apiCache';
+import { CACHE_CONFIG } from '../config/cache';
 
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 class CountryRepositoryImpl implements CountryRepository {
   async getAllCountries(): Promise<CountrySummary[]> {
-    const cacheKey = 'countries:all';
+    const cacheKey = CACHE_CONFIG.COUNTRIES_ALL;
     const cached = getCached<CountrySummary[]>(cacheKey);
     if (cached) return cached;
 
@@ -35,13 +34,13 @@ class CountryRepositoryImpl implements CountryRepository {
       throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    setCache(cacheKey, parsed.data, CACHE_TTL);
+    setCache(cacheKey, parsed.data);
     return parsed.data;
   }
 
   async getCountryByCode(code: string): Promise<Country> {
     const normalizedCode = code.trim().toUpperCase();
-    const cacheKey = `country:${normalizedCode.toLowerCase()}`;
+    const cacheKey = `${CACHE_CONFIG.COUNTRY_PREFIX}${normalizedCode.toLowerCase()}`;
     const cached = getCached<Country>(cacheKey);
     if (cached) return cached;
 
@@ -66,7 +65,7 @@ class CountryRepositoryImpl implements CountryRepository {
     }
 
     const country = parsed.data[0];
-    setCache(cacheKey, country, CACHE_TTL);
+    setCache(cacheKey, country);
     return country;
   }
 

@@ -1,5 +1,5 @@
 import { AppError } from '../../core/domain/errors';
-import { HTTP_TIMEOUTS } from '../config/http';
+import { HTTP_TIMEOUTS } from '../config/api';
 
 export interface FetchOptions extends RequestInit {
   timeout?: number;
