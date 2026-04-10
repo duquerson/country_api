@@ -1,6 +1,4 @@
-import type { Country, CountrySummary } from '../domain/Country';
-
-export type { Country, CountrySummary } from '../domain/Country';
+import type { Country, CountrySummary } from '../domain/types';
 
 export interface CountryRepository {
   getAllCountries(): Promise<CountrySummary[]>;

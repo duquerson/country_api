@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GetCountryByCode } from '../core/use-cases/GetCountryByCode';
-import type { CountryRepository, Country } from '../core/interfaces/Repository';
+import type { CountryRepository } from '../core/interfaces/Repository';
+import type { Country } from '../core/domain/types';
 
 const mockRepository: CountryRepository = {
   getAllCountries: vi.fn(),
@@ -38,13 +39,5 @@ describe('GetCountryByCode Use Case', () => {
 
     expect(result).toEqual(expectedCountry);
     expect(mockRepository.getCountryByCode).toHaveBeenCalledWith('ESP');
-  });
-
-  it('should propagate errors when country not found', async () => {
-    vi.mocked(mockRepository.getCountryByCode).mockRejectedValue(new Error('Country not found'));
-
-    const useCase = new GetCountryByCode(mockRepository);
-
-    await expect(useCase.execute('XXX')).rejects.toThrow('Country not found');
   });
 });

@@ -31,14 +31,3 @@ export function setCache<T>(key: string, data: T, ttl: number = DEFAULT_TTL): vo
   });
 }
 
-export function clearCache(key?: string): void {
-  if (key) {
-    cache.delete(key);
-  } else {
-    cache.clear();
-  }
-}
-
-export function getCacheSize(): number {
-  return cache.size;
-}

@@ -3,7 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { defineComponent } from 'vue';
 
 import { getMockCountries } from './fixtures/mockData';
-import type { Country } from '@core/domain/Country';
+import type { Country } from '@core/domain/types';
 
 const CountryDetailTest = defineComponent({
   props: {
@@ -33,7 +33,7 @@ const CountryDetailTest = defineComponent({
     async fetchCountry() {
       try {
         const countries = getMockCountries();
-        this.country = countries.find((c: any) => c.cca3 === 'ESP' || c.name.common === 'Spain');
+        this.country = countries.find((c: any) => c.cca3 === 'COL');
       } catch {
         this.error = true;
       } finally {
@@ -48,29 +48,29 @@ const CountryDetailTest = defineComponent({
 
 describe('CountryDetail Component', () => {
   it('should show loading state initially', () => {
-    const wrapper = mount(CountryDetailTest, { props: { code: 'ESP' } });
+    const wrapper = mount(CountryDetailTest, { props: { code: 'COL' } });
     expect(wrapper.find('.loading').exists()).toBe(true);
   });
 
   it('should render country details after loading', async () => {
-    const wrapper = mount(CountryDetailTest, { props: { code: 'ESP' } });
+    const wrapper = mount(CountryDetailTest, { props: { code: 'COL' } });
     await flushPromises();
 
     expect(wrapper.find('.country-detail').exists()).toBe(true);
-    expect(wrapper.text()).toContain('Spain');
-    expect(wrapper.text()).toContain('47,351,567');
-    expect(wrapper.text()).toContain('Europe');
-    expect(wrapper.text()).toContain('Madrid');
+    expect(wrapper.text()).toContain('Colombia');
+    expect(wrapper.text()).toContain('50,882,891');
+    expect(wrapper.text()).toContain('Americas');
+    expect(wrapper.text()).toContain('Bogotá');
   });
 
   it('should have a back button', () => {
-    const wrapper = mount(CountryDetailTest, { props: { code: 'ESP' } });
+    const wrapper = mount(CountryDetailTest, { props: { code: 'COL' } });
     expect(wrapper.find('.back-btn').exists()).toBe(true);
   });
 
   it('should call history.back when back button clicked', async () => {
     const backSpy = vi.spyOn(window.history, 'back');
-    const wrapper = mount(CountryDetailTest, { props: { code: 'ESP' } });
+    const wrapper = mount(CountryDetailTest, { props: { code: 'COL' } });
 
     await wrapper.find('.back-btn').trigger('click');
 

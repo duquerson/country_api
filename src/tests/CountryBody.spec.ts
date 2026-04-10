@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { defineComponent, type PropType } from 'vue';
 import { getMockCountries } from './fixtures/mockData';
-import type { CountrySummary } from '@core/domain/Country';
+import type { CountrySummary } from '@core/domain/types';
 
 const CountryBodyTest = defineComponent({
   props: {
@@ -15,7 +15,7 @@ const CountryBodyTest = defineComponent({
       <div v-else-if="error" class="error">Error</div>
       <div v-else class="countries">
         <div v-for="country in countries" :key="country.cca3" class="card">
-          {{ country.common }}
+          {{ country.name.common }}
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@ const CountryBodyTest = defineComponent({
     return {
       countries: getMockCountries().map((c: any) => ({
         cca3: c.cca3,
-        common: c.name.common,
+        name: { common: c.name.common },
         capital: c.capital,
         region: c.region,
         population: c.population,
@@ -45,8 +45,8 @@ const CountryBodyTest = defineComponent({
       this.error = false;
       try {
         const mockCountries: CountrySummary[] = [
-          { cca3: 'ESP', common: 'Spain', capital: ['Madrid'], region: 'Europe', population: 47351567, flags: { svg: '', alt: '' } },
-          { cca3: 'FRA', common: 'France', capital: ['Paris'], region: 'Europe', population: 67390000, flags: { svg: '', alt: '' } },
+          { cca3: 'COL', name: { common: 'Colombia' }, capital: ['Bogotá'], region: 'Americas', population: 50882891, flags: { svg: '', alt: '' } },
+          { cca3: 'DEU', name: { common: 'Germany' }, capital: ['Berlin'], region: 'Europe', population: 83240525, flags: { svg: '', alt: '' } },
         ];
 
         if (this.region) {
@@ -76,29 +76,30 @@ describe('CountryBody Component', () => {
 
     const cards = wrapper.findAll('.card');
     expect(cards).toHaveLength(2);
-    expect(wrapper.text()).toContain('Spain');
-    expect(wrapper.text()).toContain('France');
+    expect(wrapper.text()).toContain('Colombia');
+    expect(wrapper.text()).toContain('Germany');
   });
 
   it('should show filtered countries when region is set', async () => {
     const wrapper = mount(CountryBodyTest, {
-      props: { region: 'Europe' },
+      props: { region: 'Americas' },
     });
     await flushPromises();
 
     const cards = wrapper.findAll('.card');
     expect(cards).toHaveLength(1);
-    expect(wrapper.text()).toContain('Spain');
+    expect(wrapper.text()).toContain('Colombia');
   });
 
   it('should show filtered countries when query is set', async () => {
     const wrapper = mount(CountryBodyTest, {
-      props: { query: 'Spain' },
+      props: { query: 'Colombia' },
     });
     await flushPromises();
 
     const cards = wrapper.findAll('.card');
     expect(cards).toHaveLength(1);
+    expect(wrapper.text()).toContain('Colombia');
   });
 
   it('should show error state on fetch failure', async () => {

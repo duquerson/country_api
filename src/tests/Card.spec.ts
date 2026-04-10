@@ -1,24 +1,26 @@
-import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import Card from '@presentation/components/Card.vue';
 
 import { getMockCountries } from './fixtures/mockData';
-import type { CountrySummary } from '@core/domain/Country';
+import type { CountrySummary } from '@core/domain/types';
 
 describe('Card Component', () => {
   let mockCountry: CountrySummary;
 
   beforeAll(() => {
-    // Buscar España en el mock
+    // Buscar Colombia en el mock
     const countries = getMockCountries();
-    const spain = countries.find((c: any) => c.cca3 === 'ESP' || c.name.common === 'Spain');
+    const colombia = countries.find((c: any) => c.cca3 === 'COL');
+    if (!colombia) throw new Error('Colombia not found in mock data');
+    
     mockCountry = {
-      cca3: spain.cca3,
-      common: spain.name.common,
-      capital: spain.capital,
-      region: spain.region,
-      population: spain.population,
-      flags: spain.flags,
+      cca3: colombia.cca3,
+      name: { common: colombia.name.common },
+      capital: colombia.capital,
+      region: colombia.region,
+      population: colombia.population,
+      flags: colombia.flags,
     };
   });
 
@@ -35,7 +37,7 @@ describe('Card Component', () => {
       props: { country: mockCountry },
       global: { stubs: { ImageLazy: { template: '<div></div>' } } }
     });
-    expect(wrapper.text()).toContain(mockCountry.common);
+    expect(wrapper.text()).toContain(mockCountry.name.common);
   });
 
   it('renders formatted population', () => {
@@ -51,7 +53,7 @@ describe('Card Component', () => {
       props: { country: mockCountry },
       global: { stubs: { ImageLazy: { template: '<div></div>' } } }
     });
-    expect(wrapper.text()).toContain('Europe');
+    expect(wrapper.text()).toContain('Americas');
   });
 
   it('renders capital', () => {
@@ -59,7 +61,7 @@ describe('Card Component', () => {
       props: { country: mockCountry },
       global: { stubs: { ImageLazy: { template: '<div></div>' } } }
     });
-    expect(wrapper.text()).toContain('Madrid');
+    expect(wrapper.text()).toContain('Bogotá');
   });
 
   it('has correct detail link with country code', () => {
@@ -68,7 +70,7 @@ describe('Card Component', () => {
       global: { stubs: { ImageLazy: { template: '<div></div>' } } }
     });
     const link = wrapper.find('a');
-    expect(link.attributes('href')).toBe('/detail/esp');
+    expect(link.attributes('href')).toBe('/detail/col');
   });
 
   it('shows N/A when capital is missing', () => {

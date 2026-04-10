@@ -1,14 +1,12 @@
 import type { CountryRepository } from '../../core/interfaces/Repository';
-import type { Country, CountrySummary } from '../../core/domain/Country';
-import { networkError, notFoundError, unknownError } from '../../core/domain/AppError';
+import type { Country, CountrySummary } from '../../core/domain/types';
+import { AppError } from '../../core/domain/errors';
 import {
-  safeParseCountryList,
-  safeParseCountrySummaryList,
-  type CountrySummaryParsed,
-} from '../../core/domain/CountrySchema';
+  countryListSchema,
+  countrySummaryListSchema,
+} from '../../core/domain/schemas';
 
 import { fetchWithRetry } from '../http/fetchWithRetry';
-import { handleError, createNetworkError } from '../../core/services/ErrorService';
 import { API_URL, COUNTRY_FIELDS } from '../config/api';
 import { HTTP_TIMEOUTS } from '../config/http';
 import { getCached, setCache } from '../cache/apiCache';
@@ -27,20 +25,18 @@ class CountryRepositoryImpl implements CountryRepository {
     });
 
     if (!response.ok) {
-      throw networkError(response.status, '/all');
+      throw AppError.network(response.status, '/all');
     }
 
     const data = await response.json();
-    const parsed = safeParseCountrySummaryList(data);
+    const parsed = countrySummaryListSchema.safeParse(data);
 
     if (!parsed.success) {
-      const error = unknownError(new Error('Invalid country data from API'));
-      throw handleError(error, 'getAllCountries validation');
+      throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    const result = this.mapToSummaries(parsed.data);
-    setCache(cacheKey, result, CACHE_TTL);
-    return result;
+    setCache(cacheKey, parsed.data, CACHE_TTL);
+    return parsed.data;
   }
 
   async getCountryByCode(code: string): Promise<Country> {
@@ -57,16 +53,16 @@ class CountryRepositoryImpl implements CountryRepository {
 
     if (!response.ok) {
       if (response.status === 404) {
-        throw notFoundError('Country', normalizedCode);
+        throw AppError.notFound('Country', normalizedCode);
       }
-      throw createNetworkError(response.status);
+      throw AppError.network(response.status, `/alpha/${normalizedCode}`);
     }
 
     const data = await response.json();
-    const parsed = safeParseCountryList(Array.isArray(data) ? data : [data]);
+    const parsed = countryListSchema.safeParse(Array.isArray(data) ? data : [data]);
 
     if (!parsed.success || !parsed.data[0]) {
-      throw notFoundError('Country', normalizedCode);
+      throw AppError.notFound('Country', normalizedCode);
     }
 
     const country = parsed.data[0];
@@ -76,6 +72,8 @@ class CountryRepositoryImpl implements CountryRepository {
 
   async searchCountries(query: string): Promise<CountrySummary[]> {
     const sanitized = query.trim();
+    if (!sanitized) return this.getAllCountries();
+
     const response = await fetchWithRetry(
       `${API_URL}/name/${encodeURIComponent(sanitized)}?fields=${COUNTRY_FIELDS.SUMMARY}`,
       {
@@ -85,24 +83,20 @@ class CountryRepositoryImpl implements CountryRepository {
     );
 
     if (!response.ok) {
-      if (response.status === 404) {
-        return [];
-      }
-      throw createNetworkError(response.status);
+      if (response.status === 404) return [];
+      throw AppError.network(response.status, `/name/${sanitized}`);
     }
 
     const data = await response.json();
-    const parsed = safeParseCountrySummaryList(data);
+    const parsed = countrySummaryListSchema.safeParse(data);
 
-    if (!parsed.success) {
-      return [];
-    }
-
-    return this.mapToSummaries(parsed.data);
+    return parsed.success ? parsed.data : [];
   }
 
   async filterByRegion(region: string): Promise<CountrySummary[]> {
     const sanitized = region.trim();
+    if (!sanitized) return this.getAllCountries();
+
     const response = await fetchWithRetry(
       `${API_URL}/region/${encodeURIComponent(sanitized)}?fields=${COUNTRY_FIELDS.SUMMARY}`,
       {
@@ -112,34 +106,18 @@ class CountryRepositoryImpl implements CountryRepository {
     );
 
     if (!response.ok) {
-      throw networkError(response.status, `/region/${sanitized}`);
+      throw AppError.network(response.status, `/region/${sanitized}`);
     }
 
     const data = await response.json();
-    const parsed = safeParseCountrySummaryList(data);
+    const parsed = countrySummaryListSchema.safeParse(data);
 
     if (!parsed.success) {
-      const error = unknownError(new Error('Invalid country data from API'));
-      throw handleError(error, 'filterByRegion validation');
+      throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    return this.mapToSummaries(parsed.data);
-  }
-
-  private mapToSummaries(countries: CountrySummaryParsed): CountrySummary[] {
-    return countries.map((c) => ({
-      cca3: c.cca3,
-      common: c.name.common,
-      capital: c.capital,
-      region: c.region,
-      population: c.population,
-      flags: {
-        svg: c.flags.svg,
-        alt: c.flags.alt,
-      },
-    }));
+    return parsed.data;
   }
 }
 
 export default new CountryRepositoryImpl();
-

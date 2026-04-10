@@ -1,18 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import CountryRepositoryImpl from '../infrastructure/repositories/CountryRepositoryImpl';
-
 import { getMockCountries } from './fixtures/mockData';
-import type { Country } from '@core/domain/Country';
-
+import type { Country } from '../core/domain/types';
 
 let mockCountry: Country;
 beforeAll(() => {
-  // Buscar España en el mock
   const countries = getMockCountries();
-  mockCountry = countries.find((c: any) => c.cca3 === 'ESP' || c.name.common === 'Spain');
+  mockCountry = countries.find((c: any) => c.cca3 === 'COL');
+  if (!mockCountry) throw new Error('Colombia not found in mock data');
 });
-
-
 
 describe('CountryRepositoryImpl', () => {
   beforeEach(() => {
@@ -29,7 +25,7 @@ describe('CountryRepositoryImpl', () => {
 
     const result = await CountryRepositoryImpl.getAllCountries();
     expect(result).toHaveLength(1);
-    expect(result[0].common).toBe(mockCountry.name.common);
+    expect(result[0].name.common).toBe(mockCountry.name.common);
   });
 
   it('should search countries by name', async () => {
@@ -42,7 +38,7 @@ describe('CountryRepositoryImpl', () => {
 
     const result = await CountryRepositoryImpl.searchCountries(mockCountry.name.common);
     expect(result).toHaveLength(1);
-    expect(result[0].common).toBe(mockCountry.name.common);
+    expect(result[0].name.common).toBe(mockCountry.name.common);
   });
 
   it('should filter countries by region', async () => {

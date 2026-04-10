@@ -1,5 +1,4 @@
-import type { AppError } from '../../core/domain/AppError';
-import { createTimeoutError, createNetworkError } from '../../core/services/ErrorService';
+import { AppError } from '../../core/domain/errors';
 import { HTTP_TIMEOUTS } from '../config/http';
 
 export interface FetchOptions extends RequestInit {
@@ -47,17 +46,9 @@ export async function fetchWithRetry(
   }
 
   if (lastError instanceof Error && lastError.name === 'AbortError') {
-    throw createTimeoutError();
+    throw AppError.timeout();
   }
 
-  throw createNetworkError(lastError);
+  throw AppError.network(0, url, lastError instanceof Error ? lastError : undefined);
 }
 
-export function createTimeoutPromise<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<never>((_, reject) =>
-      setTimeout(() => reject(createTimeoutError()), ms)
-    ),
-  ]);
-}

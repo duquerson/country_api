@@ -3,20 +3,20 @@ import { describe, it, expect } from 'vitest';
 describe('Country Domain', () => {
   it('should have valid CountrySummary interface shape', () => {
     const countrySummary = {
-      cca3: 'ESP',
-      common: 'Spain',
-      capital: ['Madrid'],
-      region: 'Europe',
-      population: 47351567,
+      cca3: 'COL',
+      name: { common: 'Colombia' },
+      capital: ['Bogotá'],
+      region: 'Americas',
+      population: 50882891,
       flags: {
-        svg: 'https://flagcdn.com/es.svg',
-        alt: 'flag of Spain',
+        svg: 'https://flagcdn.com/co.svg',
+        alt: 'flag of Colombia',
       },
     };
 
-    expect(countrySummary.cca3).toBe('ESP');
-    expect(countrySummary.common).toBe('Spain');
-    expect(countrySummary.capital).toContain('Madrid');
+    expect(countrySummary.cca3).toBe('COL');
+    expect(countrySummary.name.common).toBe('Colombia');
+    expect(countrySummary.capital).toContain('Bogotá');
     expect(countrySummary.population).toBeGreaterThan(0);
     expect(countrySummary.flags.svg).toBeDefined();
   });
@@ -24,32 +24,32 @@ describe('Country Domain', () => {
   it('should have valid Country interface shape', () => {
     const country = {
       name: {
-        common: 'Spain',
-        official: 'Kingdom of Spain',
+        common: 'Colombia',
+        official: 'Republic of Colombia',
         nativeName: {
-          spa: { common: 'España', official: 'Reino de España' },
+          spa: { common: 'Colombia', official: 'República de Colombia' },
         },
       },
-      capital: ['Madrid'],
-      region: 'Europe',
-      subregion: 'Southern Europe',
-      population: 47351567,
-      flags: { svg: 'https://flagcdn.com/es.svg', png: 'https://flagcdn.com/w320/es.png', alt: 'flag of Spain' },
-      tld: ['.es'],
-      currencies: { EUR: { name: 'Euro', symbol: '€' } },
+      capital: ['Bogotá'],
+      region: 'Americas',
+      subregion: 'South America',
+      population: 50882891,
+      flags: { svg: 'https://flagcdn.com/co.svg', png: 'https://flagcdn.com/w320/co.png', alt: 'flag of Colombia' },
+      tld: ['.co'],
+      currencies: { COP: { name: 'Colombian peso', symbol: '$' } },
       languages: { spa: 'Spanish' },
-      borders: ['AND', 'FRA', 'GIB', 'PRT', 'MAR'],
-      cca3: 'ESP',
-      cca2: 'ES',
-      continents: ['Europe'],
-      timezones: ['UTC+01:00'],
+      borders: ['BRA', 'ECU', 'PAN', 'PER', 'VEN'],
+      cca3: 'COL',
+      cca2: 'CO',
+      continents: ['South America'],
+      timezones: ['UTC-05:00'],
     };
 
-    expect(country.name.common).toBe('Spain');
-    expect(country.name.official).toBe('Kingdom of Spain');
-    expect(country.population).toBe(47351567);
+    expect(country.name.common).toBe('Colombia');
+    expect(country.name.official).toBe('Republic of Colombia');
+    expect(country.population).toBe(50882891);
     expect(country.borders).toHaveLength(5);
-    expect(country.currencies.EUR.name).toBe('Euro');
+    expect(country.currencies.COP.name).toBe('Colombian peso');
     expect(country.languages.spa).toBe('Spanish');
   });
 
@@ -75,23 +75,23 @@ describe('Country Domain', () => {
   });
 
   it('should format population with locale', () => {
-    const population = 47351567;
+    const population = 50882891;
     const formatted = population.toLocaleString('en-US');
 
-    expect(formatted).toBe('47,351,567');
+    expect(formatted).toBe('50,882,891');
   });
 
   it('should extract first currency name from currencies object', () => {
-    const currencies: Record<string, { name: string; symbol: string }> = { EUR: { name: 'Euro', symbol: '€' } };
+    const currencies: Record<string, { name: string; symbol: string }> = { COP: { name: 'Colombian peso', symbol: '$' } };
     const firstCurrency = currencies[Object.keys(currencies)[0] as string].name;
 
-    expect(firstCurrency).toBe('Euro');
+    expect(firstCurrency).toBe('Colombian peso');
   });
 
   it('should extract first language from languages object', () => {
-    const languages = { spa: 'Spanish', cat: 'Catalan' };
+    const languages = { spa: 'Spanish', que: 'Quechua' };
     const languageList = Object.values(languages).join(', ');
 
-    expect(languageList).toBe('Spanish, Catalan');
+    expect(languageList).toBe('Spanish, Quechua');
   });
 });
