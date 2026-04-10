@@ -7,14 +7,14 @@ export function mapAppErrorToActionError(error: unknown): { message: string; cod
       code: error.code,
     };
   }
-  
+
   if (error instanceof Error) {
     return {
       message: error.message,
       code: ErrorCode.UNKNOWN,
     };
   }
-  
+
   return {
     message: 'An unknown error occurred',
     code: ErrorCode.UNKNOWN,
@@ -24,3 +24,4 @@ export function mapAppErrorToActionError(error: unknown): { message: string; cod
 export function createActionError(message: string, code: ErrorCode = ErrorCode.UNKNOWN) {
   return new Error(`${code}: ${message}`);
 }
+

@@ -1,5 +1,5 @@
 import { defineAction } from 'astro:actions';
-import CountryRepositoryImpl from '../infrastructure/repositories/CountryRepositoryImpl';
+import { getCountryByCode, searchCountries, filterByRegion } from '../core/di';
 import { mapAppErrorToActionError } from './errors';
 import { countryCodeSchema, searchQuerySchema, regionSchema } from './schemas';
 
@@ -8,7 +8,7 @@ export const countries = {
     input: countryCodeSchema.omit({ code: true }).optional(),
     handler: async () => {
       try {
-        return await CountryRepositoryImpl.getAllCountries();
+        return await searchCountries.execute('');
       } catch (e) {
         const errorInfo = mapAppErrorToActionError(e);
         throw new Error(errorInfo.message);
@@ -20,7 +20,7 @@ export const countries = {
     input: countryCodeSchema,
     handler: async ({ code }) => {
       try {
-        return await CountryRepositoryImpl.getCountryByCode(code.toUpperCase());
+        return await getCountryByCode.execute(code.toUpperCase());
       } catch (e) {
         const errorInfo = mapAppErrorToActionError(e);
         throw new Error(errorInfo.message);
@@ -32,7 +32,7 @@ export const countries = {
     input: searchQuerySchema,
     handler: async ({ query }) => {
       try {
-        return await CountryRepositoryImpl.searchCountries(query);
+        return await searchCountries.execute(query);
       } catch (e) {
         const errorInfo = mapAppErrorToActionError(e);
         throw new Error(errorInfo.message);
@@ -44,7 +44,7 @@ export const countries = {
     input: regionSchema,
     handler: async ({ region }) => {
       try {
-        return await CountryRepositoryImpl.filterByRegion(region);
+        return await filterByRegion.execute(region);
       } catch (e) {
         const errorInfo = mapAppErrorToActionError(e);
         throw new Error(errorInfo.message);

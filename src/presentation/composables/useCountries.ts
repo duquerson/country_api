@@ -4,6 +4,7 @@ import type { CountrySummary, Country } from '../../core/domain/Country';
 import { toCountrySummary } from '../../core/domain/Country';
 import { handleError } from '../../core/services/ErrorService';
 import { AppError } from '../../core/domain/AppError';
+import type { RegionInput } from '../../actions/schemas';
 
 async function executeAsyncOperation<T>(
   asyncFn: () => Promise<T>, 
@@ -31,7 +32,7 @@ export function useCountries() {
   const fetchAll = async (): Promise<CountrySummary[]> => {
     const result = await executeAsyncOperation(
       async () => {
-        const { data, error: actionError } = await actions.countries.getAll();
+        const { data, error: actionError } = await actions.countries.getAll(undefined);
         if (actionError) throw new Error(actionError.message);
         return data;
       },
@@ -67,7 +68,9 @@ export function useCountries() {
   const filter = async (region: string): Promise<CountrySummary[]> => {
     const result = await executeAsyncOperation(
       async () => {
-        const { data, error: actionError } = await actions.countries.filterByRegion({ region });
+        const { data, error: actionError } = await actions.countries.filterByRegion({
+          region: region as RegionInput['region'],
+        });
         if (actionError) throw new Error(actionError.message);
         return data;
       },
@@ -116,11 +119,12 @@ export function useCountryDetail() {
       if (!borderCodes || borderCodes.length === 0) return [];
       const results = await Promise.all(
         borderCodes.map(async (code) => {
-          const { data } = await actions.countries.getByCode({ code });
+          const { data, error: actionError } = await actions.countries.getByCode({ code });
+          if (actionError || !data) return undefined;
           return toCountrySummary(data);
         })
       );
-      return results;
+      return results.filter((x): x is NonNullable<typeof x> => Boolean(x));
     } catch (e) {
       const appError = handleError(e, 'GetBorderCountries');
       if (import.meta.env.DEV) {

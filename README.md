@@ -21,24 +21,25 @@ Aplicación web para explorar países del mundo usando la REST Countries API.
 
 ```
 src/
-├── actions/          # Astro server actions
-├── core/             # Domain layer (DDD)
-│   ├── domain/       # Entities, schemas, types
-│   ├── interfaces/   # Repository ports
-│   ├── services/    # Error handling
-│   └── use-cases/   # Business logic
-├── infrastructure/  # Adapters layer
-│   ├── cache/       # API caching
-│   ├── config/      # Configuration
-│   ├── http/        # HTTP client
-│   └── repositories/# Repository implementation
-├── presentation/    # UI layer
-│   ├── components/  # Vue components
-│   └── composables/ # Vue composables
-├── pages/           # Astro pages
-├── layouts/         # Astro layouts
-└── tests/           # Unit & E2E tests
+├── actions/           # Server actions (driver)
+├── core/             # Domain (DDD + Hexagonal)
+│   ├── domain/       # Entidades, schemas, tipos
+│   ├── interfaces/  # Puertos
+│   ├── services/   # Manejo de errores
+│   └── use-cases/ # Casos de uso
+├── infrastructure/   # Adaptadores
+│   ├── cache/      # Cache en memoria
+│   ├── config/     # Configuración API
+│   ├── http/      # HTTP con retry
+│   └── repositories/
+├── presentation/    # UI
+│   ├── components/
+│   └── composables/
+├── pages/          # Rutas Astro
+└── layouts/       # Layouts
 ```
+
+**Regla**: dependencias apuntan hacia adentro (actions → use-cases → puertos → adaptadores).
 
 ## 🛠️ Tech Stack
 
@@ -52,12 +53,12 @@ src/
 ## 📦 Scripts
 
 ```bash
-npm run dev          # Iniciar servidor de desarrollo
-npm run build        # Build de producción
-npm run test         # Tests unitarios
-npm run test:run     # Tests unitarios (single run)
-npm run e2e          # Tests E2E con Playwright
-npm run typecheck    # Verificación de tipos
+pnpm dev          # Iniciar servidor de desarrollo
+pnpm build        # Build de producción
+pnpm test         # Tests unitarios
+pnpm test:run     # Tests unitarios (single run)
+pnpm e2e          # Tests E2E con Playwright
+pnpm typecheck    # Verificación de tipos
 ```
 
 ## 🧪 Testing
