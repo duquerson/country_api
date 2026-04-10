@@ -3,8 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 
 export default defineConfig({
-  // Workaround: plugin-vue types can drift across Vite/Vitest versions.
-  plugins: [vue() as unknown as any],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
