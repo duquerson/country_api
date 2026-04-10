@@ -8,10 +8,6 @@ export default defineConfig({
   adapter: vercel(),
   site: 'https://country-api.example.com',
   transitions: true,
-  server: {
-    port: 3000,
-    strictPort: false,
-  },
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'viewport',

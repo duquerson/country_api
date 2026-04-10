@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CountrySummary } from '../../core/domain/Country';
+import type { CountrySummary } from '../../core/domain/types';
 import ImageLazy from './ImageLazy.vue';
 import { useFormatting } from '../../core/domain/useFormatting';
 import { UI_LABELS } from '../../core/constants/uiLabels';
@@ -7,11 +7,6 @@ import { UI_LABELS } from '../../core/constants/uiLabels';
 const props = defineProps<{
   country: CountrySummary;
   index?: number;
-}>();
-
-defineEmits<{
-  country: [country: CountrySummary];
-  load: [data: { loadButton: boolean }];
 }>();
 
 const { formatNumber } = useFormatting();
@@ -29,14 +24,14 @@ const isAboveFold = props.index !== undefined && props.index < 8;
     <div class="aspect-3/2 bg-muted/20 relative overflow-hidden">
       <ImageLazy
         :countryFlag="country.flags.svg"
-        :countryAlt="country.flags.alt || country.common"
+        :countryAlt="country.flags.alt || country.name.common"
         :priority="isAboveFold"
       />
     </div>
 
     <div class="p-6 pb-8">
-      <h2 class="text-lg font-extrabold text-text mb-4 leading-tight drop-shadow-sm line-clamp-1" :title="country.common">
-        {{ country.common }}
+      <h2 class="text-lg font-extrabold text-text mb-4 leading-tight drop-shadow-sm line-clamp-1" :title="country.name.common">
+        {{ country.name.common }}
       </h2>
 
       <div class="flex flex-col gap-2">

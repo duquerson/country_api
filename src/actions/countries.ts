@@ -1,17 +1,17 @@
 import { defineAction } from 'astro:actions';
-import { getCountryByCode, searchCountries, filterByRegion } from '../core/di';
-import { mapAppErrorToActionError } from './errors';
-import { countryCodeSchema, searchQuerySchema, regionSchema } from './schemas';
+import { getCountryByCode, getCountries } from '../core/di';
+import { handleError } from '../core/domain/errors';
+import { countryCodeSchema, countryFilterSchema } from '../core/domain/schemas';
 
 export const countries = {
-  getAll: defineAction({
-    input: countryCodeSchema.omit({ code: true }).optional(),
-    handler: async () => {
+  getCountries: defineAction({
+    input: countryFilterSchema,
+    handler: async (filters) => {
       try {
-        return await searchCountries.execute('');
+        return await getCountries.execute(filters);
       } catch (e) {
-        const errorInfo = mapAppErrorToActionError(e);
-        throw new Error(errorInfo.message);
+        const error = handleError(e, 'getCountries Action');
+        throw new Error(error.message);
       }
     }
   }),
@@ -22,33 +22,12 @@ export const countries = {
       try {
         return await getCountryByCode.execute(code.toUpperCase());
       } catch (e) {
-        const errorInfo = mapAppErrorToActionError(e);
-        throw new Error(errorInfo.message);
+        const error = handleError(e, 'getByCode Action');
+        throw new Error(error.message);
       }
     }
   }),
-  
-  search: defineAction({
-    input: searchQuerySchema,
-    handler: async ({ query }) => {
-      try {
-        return await searchCountries.execute(query);
-      } catch (e) {
-        const errorInfo = mapAppErrorToActionError(e);
-        throw new Error(errorInfo.message);
-      }
-    }
-  }),
-  
-  filterByRegion: defineAction({
-    input: regionSchema,
-    handler: async ({ region }) => {
-      try {
-        return await filterByRegion.execute(region);
-      } catch (e) {
-        const errorInfo = mapAppErrorToActionError(e);
-        throw new Error(errorInfo.message);
-      }
-    }
-  }),
+
+  // For backward compatibility or specific needs if any, 
+  // but unified getCountries handles getAll, search, and filter.
 };

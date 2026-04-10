@@ -10,7 +10,7 @@ import { GlobeAltIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
       <GlobeAltIcon class="w-20 h-20 mx-auto mb-8 text-terracotta dark:text-sage opacity-60" />
       
       <div class="space-y-4">
-        <h2 class="font-sans text-[5rem] sm:text-[8rem] font-bold leading-none tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-text to-terracotta dark:from-text dark:to-sage mb-2">404</h2>
+        <h2 class="font-sans text-[5rem] sm:text-[8rem] font-bold leading-none tracking-tight text-transparent bg-clip-text bg-linear-to-br from-text to-terracotta dark:from-text dark:to-sage mb-2">404</h2>
         <p class="font-sans text-xl sm:text-2xl font-semibold text-text">Territory not found</p>
         <p class="font-sans text-base sm:text-lg text-muted leading-relaxed max-w-[400px] mx-auto pb-6">
           The region you're exploring doesn't appear on our charts. 

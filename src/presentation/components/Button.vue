@@ -1,10 +1,8 @@
 <script setup lang="ts">
-const props = defineProps<{
+const _props = defineProps<{
   variant?: 'primary' | 'secondary' | 'outline' | 'text';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
-  asChild?: boolean;
-  [key: string]: any; // Allow spreading other props
 }>;
 
 const defaultVariants = {
@@ -24,15 +22,7 @@ const baseClasses = 'inline-flex items-center justify-center gap-2 rounded font-
 </script>
 
 <template>
-  <component
-    v-bind="$props"
-    v-if="asChild"
-  >
-    <slot />
-  </component>
-  
   <button
-    v-else
     :class="[
       baseClasses,
       defaultVariants[variant || 'primary'],
@@ -44,7 +34,3 @@ const baseClasses = 'inline-flex items-center justify-center gap-2 rounded font-
     <slot />
   </button>
 </template>
-
-<style scoped>
-/* Button styles */
-</style>

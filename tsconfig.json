@@ -9,5 +9,11 @@
       "@infrastructure/*": ["src/infrastructure/*"],
       "@presentation/*": ["src/presentation/*"]
     }
-  }
+  },
+  "include": [
+    "src/**/*",
+    ".astro/types.d.ts",
+    "env.d.ts"
+  ],
+  "exclude": ["dist"]
 }

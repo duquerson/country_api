@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { actions } from 'astro:actions';
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { ArrowLeftIcon } from '@heroicons/vue/24/solid';
 import ImageLazy from './ImageLazy.vue';
 import Borders from './Borders.vue';
@@ -9,9 +8,7 @@ import CountryDetailField from './CountryDetailField.vue';
 import { getFirstNativeName, getFirstCurrency, getLanguages } from '../../core/domain/countryFormatters';
 import { useFormatting } from '../../core/domain/useFormatting';
 import { UI_LABELS } from '../../core/constants/uiLabels';
-import { handleError } from '../../core/services/ErrorService';
-import type { AppError } from '../../core/domain/AppError';
-import type { Country } from '../../core/domain/Country';
+import { useCountryDetail } from '../composables/useCountries';
 
 const { formatNumber } = useFormatting();
 
@@ -19,25 +16,7 @@ const props = defineProps<{
   code: string;
 }>();
 
-const country = ref<Country | null>(null);
-const loading = ref(true);
-const error = ref<AppError | null>(null);
-
-const fetchByCode = async (code: string) => {
-  loading.value = true;
-  error.value = null;
-  try {
-    const { data, error: actionError } = await actions.countries.getByCode({ code });
-    if (actionError) {
-      throw new Error(actionError.message);
-    }
-    country.value = data;
-  } catch (e) {
-    error.value = handleError(e, 'GetCountryByCode');
-  } finally {
-    loading.value = false;
-  }
-};
+const { country, loading, error, fetchByCode } = useCountryDetail();
 
 const goBack = () => {
   window.history.back();
@@ -77,8 +56,8 @@ onMounted(async () => {
 
       <section v-else-if="country" class="grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-16 items-start">
         <div class="relative w-full rounded overflow-hidden shadow-sm" :style="{ viewTransitionName: 'country-flag-' + code }">
-          <ImageLazy :countryFlag="country.flags.svg" :countryAlt="country.flags.alt" />
-          <div class="absolute bottom-0 left-0 w-16 h-1 bg-gradient-to-r from-muted to-muted/50 hidden"></div>
+          <ImageLazy :countryFlag="country.flags.svg" :countryAlt="country.flags.alt" :priority="true" />
+          <div class="absolute bottom-0 left-0 w-16 h-1 bg-linear-to-r from-muted to-muted/50 hidden"></div>
         </div>
 
         <div class="pt-4 lg:pt-10">

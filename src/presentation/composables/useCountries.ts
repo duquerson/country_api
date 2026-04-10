@@ -1,143 +1,61 @@
-import { ref, readonly, type Ref } from 'vue';
 import { actions } from 'astro:actions';
-import type { CountrySummary, Country } from '../../core/domain/Country';
-import { toCountrySummary } from '../../core/domain/Country';
-import { handleError } from '../../core/services/ErrorService';
-import { AppError } from '../../core/domain/AppError';
-import type { RegionInput } from '../../actions/schemas';
-
-async function executeAsyncOperation<T>(
-  asyncFn: () => Promise<T>, 
-  loading: Ref<boolean>, 
-  error: Ref<AppError | null>, 
-  errorContext: string
-): Promise<T | undefined> {
-  loading.value = true;
-  error.value = null;
-  try {
-    return await asyncFn();
-  } catch (e) {
-    error.value = handleError(e, errorContext);
-    return undefined;
-  } finally {
-    loading.value = false;
-  }
-}
+import { useAsync } from './useAsync';
+import type { CountrySummary } from '../../core/domain/types';
+import { toCountrySummary } from '../../core/domain/types';
 
 export function useCountries() {
-  const countries = ref<CountrySummary[]>([]);
-  const loading = ref(false);
-  const error = ref<AppError | null>(null);
-
-  const fetchAll = async (): Promise<CountrySummary[]> => {
-    const result = await executeAsyncOperation(
-      async () => {
-        const { data, error: actionError } = await actions.countries.getAll(undefined);
-        if (actionError) throw new Error(actionError.message);
-        return data;
-      },
-      loading,
-      error,
-      'GetAllCountries'
-    );
-    if (result) {
-      countries.value = result;
-      return result;
-    }
-    return [];
-  };
-
-  const search = async (query: string): Promise<CountrySummary[]> => {
-    const result = await executeAsyncOperation(
-      async () => {
-        const { data, error: actionError } = await actions.countries.search({ query });
-        if (actionError) throw new Error(actionError.message);
-        return data;
-      },
-      loading,
-      error,
-      'SearchCountries'
-    );
-    if (result) {
-      countries.value = result;
-      return result;
-    }
-    return [];
-  };
-
-  const filter = async (region: string): Promise<CountrySummary[]> => {
-    const result = await executeAsyncOperation(
-      async () => {
-        const { data, error: actionError } = await actions.countries.filterByRegion({
-          region: region as RegionInput['region'],
-        });
-        if (actionError) throw new Error(actionError.message);
-        return data;
-      },
-      loading,
-      error,
-      'FilterByRegion'
-    );
-    if (result) {
-      countries.value = result;
-      return result;
-    }
-    return [];
-  };
+  const { 
+    data: countries, 
+    loading, 
+    error, 
+    execute: fetch, 
+    setData 
+  } = useAsync(async (filters: { query?: string; region?: string } = {}) => {
+    const { data, error } = await actions.countries.getCountries(filters);
+    if (error) throw new Error(error.message);
+    return data || [];
+  }, 'GetCountries');
 
   return {
-    countries: readonly(countries),
-    loading: readonly(loading),
-    error: readonly(error),
-    fetchAll,
-    search,
-    filter,
+    countries,
+    loading,
+    error,
+    fetch,
+    setCountries: setData
   };
 }
 
 export function useCountryDetail() {
-  const country = ref<Country | null>(null);
-  const loading = ref(true);
-  const error = ref<AppError | null>(null);
+  const { 
+    data: country, 
+    loading, 
+    error, 
+    execute: fetchByCode 
+  } = useAsync(async (code: string) => {
+    const { data, error } = await actions.countries.getByCode({ code });
+    if (error) throw new Error(error.message);
+    return data;
+  }, 'GetCountryByCode');
 
-  const fetchByCode = async (code: string) => {
-    loading.value = true;
-    error.value = null;
+  const fetchBorders = async (borderCodes: string[]): Promise<CountrySummary[]> => {
+    if (!borderCodes?.length) return [];
     try {
-      const { data, error: actionError } = await actions.countries.getByCode({ code });
-      if (actionError) throw new Error(actionError.message);
-      country.value = data;
-    } catch (e) {
-      error.value = handleError(e, 'GetCountryByCode');
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const fetchBorders = async (borderCodes: string[]) => {
-    try {
-      if (!borderCodes || borderCodes.length === 0) return [];
       const results = await Promise.all(
         borderCodes.map(async (code) => {
-          const { data, error: actionError } = await actions.countries.getByCode({ code });
-          if (actionError || !data) return undefined;
-          return toCountrySummary(data);
+          const { data } = await actions.countries.getByCode({ code });
+          return data ? toCountrySummary(data) : null;
         })
       );
-      return results.filter((x): x is NonNullable<typeof x> => Boolean(x));
-    } catch (e) {
-      const appError = handleError(e, 'GetBorderCountries');
-      if (import.meta.env.DEV) {
-        console.error('Failed to fetch borders:', appError.message);
-      }
+      return results.filter((c): c is CountrySummary => c !== null);
+    } catch {
       return [];
     }
   };
 
   return {
-    country: readonly(country),
-    loading: readonly(loading),
-    error: readonly(error),
+    country,
+    loading,
+    error,
     fetchByCode,
     fetchBorders,
   };

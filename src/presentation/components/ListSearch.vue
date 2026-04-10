@@ -3,6 +3,11 @@ import { ref } from 'vue';
 import Search from './Search.vue';
 import ListContinents from './ListContinents.vue';
 import CountryBody from './CountryBody.vue';
+import type { CountrySummary } from '../../core/domain/types';
+
+const props = defineProps<{
+  initialData?: CountrySummary[];
+}>();
 
 const query = ref('');
 const region = ref('');
@@ -30,5 +35,9 @@ const handleSelect = (r: string) => {
       </div>
     </div>
   </div>
-  <CountryBody :query="query" :region="region" />
+  <CountryBody 
+    :query="query" 
+    :region="region" 
+    :initial-data="props.initialData"
+  />
 </template>

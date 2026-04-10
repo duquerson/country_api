@@ -1,5 +1,5 @@
 // Helpers seguros para acceder a propiedades anidadas de Country
-import type { Country } from './Country';
+import type { Country } from './types';
 
 export const getFirstNativeName = (country: Country): string => {
     const key = Object.keys(country.name.nativeName || {})[0];

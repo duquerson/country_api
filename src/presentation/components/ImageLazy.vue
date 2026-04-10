@@ -44,6 +44,6 @@ const handleLoad = () => {
     @load="handleLoad"
     :style="{ viewTransitionName: 'country-flag-' + countryFlag.split('/').pop()?.replace('.svg', '') }"
     class="w-full h-full object-cover transition-opacity duration-500"
-    :class="{ 'opacity-0': !imageLoaded, 'opacity-100': imageLoaded }"
+    :class="{ 'opacity-0': !imageLoaded && !priority, 'opacity-100': imageLoaded || priority }"
   />
 </template>

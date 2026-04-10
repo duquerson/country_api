@@ -1,11 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ListSearch from '../presentation/components/ListSearch.vue';
+import { getCountries } from '../core/di';
+
+// SSR: Fetch initial data
+let initialCountries = [];
+try {
+  initialCountries = await getCountries.execute();
+} catch (e) {
+  console.error('Failed to fetch initial countries during SSR:', e);
+}
 ---
 
 <BaseLayout 
   title="Where in the world?"
   description="Search and explore countries from around the world. Filter by region, view detailed information, and discover borders."
 >
-  <ListSearch client:load />
+  <ListSearch client:load initialData={initialCountries} />
 </BaseLayout>
