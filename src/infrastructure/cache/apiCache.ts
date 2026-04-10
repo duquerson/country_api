@@ -7,7 +7,9 @@ interface CacheEntry<T> {
 
 const cache = new Map<string, CacheEntry<unknown>>();
 
-const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
+import { CACHE_CONFIG } from '../config/cache';
+
+const DEFAULT_TTL = CACHE_CONFIG.DEFAULT_TTL;
 
 export function getCached<T>(key: string): T | null {
   const entry = cache.get(key) as CacheEntry<T> | undefined;

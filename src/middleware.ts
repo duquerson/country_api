@@ -36,9 +36,11 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   // CSP
   response.headers.set('Content-Security-Policy', buildCsp());
 
-  // Cache: evita cachear HTML SSR por proxies por defecto
+  // Cache: Estrategia Stale-While-Revalidate (SWR) para mejorar performance en Edge/CDN
   if (context.request.method === 'GET' && (context.url.pathname === '/' || context.url.pathname.startsWith('/detail/'))) {
-    response.headers.set('Cache-Control', 'no-store');
+    // s-maxage=600: Cache en el servidor (Vercel) por 10 min
+    // stale-while-revalidate=30: Sirve data vieja por 30s mientras refresca de fondo
+    response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=30');
   }
 
   return response;

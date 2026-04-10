@@ -1,20 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ListSearch from '../presentation/components/ListSearch.vue';
+import ListSearch from '@presentation/components/country/ListSearch.vue';
+import SkeletonList from '@presentation/components/country/SkeletonList.astro';
 import { getCountries } from '../core/di';
 
-// SSR: Fetch initial data
-let initialCountries = [];
-try {
-  initialCountries = await getCountries.execute();
-} catch (e) {
-  console.error('Failed to fetch initial countries during SSR:', e);
-}
+// SSR: Fetch initial data (Managed by Server Island)
+const initialCountries = await getCountries.execute().catch(() => []);
 ---
 
 <BaseLayout 
   title="Where in the world?"
   description="Search and explore countries from around the world. Filter by region, view detailed information, and discover borders."
 >
-  <ListSearch client:load initialData={initialCountries} />
+  <ListSearch server:defer client:load initialData={initialCountries}>
+    <SkeletonList slot="fallback" />
+  </ListSearch>
 </BaseLayout>
