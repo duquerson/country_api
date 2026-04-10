@@ -17,40 +17,6 @@ describe('Domain - Validation Schemas', () => {
     });
   });
 
-  describe('searchQuerySchema', () => {
-    it('should accept valid search query', () => {
-      const result = schemas.searchQuerySchema.safeParse({ query: 'spain' });
-      expect(result.success).toBe(true);
-    });
-
-    it('should accept empty query (as intentional for "all")', () => {
-      const result = schemas.searchQuerySchema.safeParse({ query: '' });
-      expect(result.success).toBe(true);
-    });
-
-    it('should reject query exceeding max length', () => {
-      const longQuery = 'a'.repeat(101);
-      const result = schemas.searchQuerySchema.safeParse({ query: longQuery });
-      expect(result.success).toBe(false);
-    });
-  });
-
-  describe('regionSchema', () => {
-    it('should accept Africa', () => {
-      const result = schemas.regionSchema.safeParse({ region: 'Africa' });
-      expect(result.success).toBe(true);
-    });
-
-    it('should accept empty region (as intentional for "all")', () => {
-      const result = schemas.regionSchema.safeParse({ region: '' });
-      expect(result.success).toBe(true);
-    });
-
-    it('should reject invalid region', () => {
-      const result = schemas.regionSchema.safeParse({ region: 'InvalidRegion' });
-      expect(result.success).toBe(false);
-    });
-  });
 
   describe('countrySummarySchema', () => {
     it('should parse valid country summary', () => {

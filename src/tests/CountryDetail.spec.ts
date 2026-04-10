@@ -3,6 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { defineComponent } from 'vue';
 
 import { getMockCountries } from './fixtures/mockData';
+import CountryDetail from '@presentation/components/country/CountryDetail.vue';
 import type { Country } from '@core/domain/types';
 
 const CountryDetailTest = defineComponent({

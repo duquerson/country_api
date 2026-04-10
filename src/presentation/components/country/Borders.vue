@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { ArrowRightIcon } from '@heroicons/vue/24/solid';
-import { useCountryDetail } from '../composables/useCountries';
-import type { CountrySummary } from '../../core/domain/types';
+import Badge from '@presentation/components/ui/Badge.vue';
+import Skeleton from '@presentation/components/ui/Skeleton.vue';
+import { useCountryDetail } from '@presentation/composables/useCountries';
+import type { CountrySummary } from '@core/domain/types';
 
 const props = defineProps<{
   borders: readonly string[];
@@ -27,16 +29,19 @@ const handle_click = (code: string) => {
 <template>
   <div class="flex flex-wrap gap-2 sm:gap-3">
     <div v-if="loading" class="flex gap-2">
-       <div v-for="i in 3" :key="i" class="w-20 h-8 bg-muted/20 animate-pulse rounded"></div>
+       <Skeleton v-for="i in 3" :key="i" width="80px" height="32px" />
     </div>
-    <button
+    <Badge
       v-for="country in borderCountries"
       :key="country.cca3"
+      clickable
       @click="() => handle_click(country.cca3)"
-      class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-surface border border-muted/10 rounded shadow-sm text-xs sm:text-[13px] font-medium text-text cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:border-muted/30 focus:outline-none focus:ring-2 focus:ring-muted/50 group"
+      class="group"
     >
-      <span class="tracking-normal">{{ country.name.common }}</span>
-      <ArrowRightIcon class="w-3.5 h-3.5 opacity-50 transition-transform duration-300 group-hover:translate-x-1" />
-    </button>
+      <span>{{ country.name.common }}</span>
+      <template #icon-right>
+        <ArrowRightIcon class="w-3.5 h-3.5 opacity-50 transition-transform duration-300 group-hover:translate-x-1" />
+      </template>
+    </Badge>
   </div>
 </template>

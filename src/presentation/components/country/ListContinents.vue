@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+import { CONFIG } from '@core/constants/config';
+import { UI_LABELS } from '@core/constants/uiLabels';
+import { ChevronDownIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const emit = defineEmits<{
   select: [region: string];
 }>();
 
-const continents = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
+const continents = CONFIG.REGIONS;
 const listOpen = ref(false);
 const select = ref('');
 
@@ -46,7 +48,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       aria-haspopup="listbox"
       aria-label="Filter countries by region"
     >
-      <span>{{ select || 'Filter by Region' }}</span>
+      <span>{{ select || UI_LABELS.FILTER_BY_REGION }}</span>
       <ChevronDownIcon 
         class="w-4 h-4 text-text transition-transform duration-300"
         :class="{ 'rotate-180': listOpen }"
@@ -76,7 +78,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
             class="flex items-center gap-2 hover:text-text cursor-pointer w-full text-left bg-transparent border-none p-0"
           >
             <XMarkIcon class="w-4 h-4" aria-hidden="true" />
-            <span>Clear filter</span>
+            <span>{{ UI_LABELS.CLEAR_FILTER }}</span>
           </button>
         </li>
         <li 

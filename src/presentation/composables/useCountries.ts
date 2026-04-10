@@ -1,7 +1,7 @@
 import { actions } from 'astro:actions';
 import { useAsync } from './useAsync';
-import type { CountrySummary } from '../../core/domain/types';
-import { toCountrySummary } from '../../core/domain/types';
+import type { CountrySummary } from '@core/domain/types';
+import { toCountrySummary } from '@core/domain/types';
 
 export function useCountries() {
   const { 

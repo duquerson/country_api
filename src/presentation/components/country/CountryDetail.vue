@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { ArrowLeftIcon } from '@heroicons/vue/24/solid';
-import ImageLazy from './ImageLazy.vue';
-import Borders from './Borders.vue';
-import Page404 from './Page404.vue';
-import CountryDetailField from './CountryDetailField.vue';
-import { getFirstNativeName, getFirstCurrency, getLanguages } from '../../core/domain/countryFormatters';
-import { useFormatting } from '../../core/domain/useFormatting';
-import { UI_LABELS } from '../../core/constants/uiLabels';
-import { useCountryDetail } from '../composables/useCountries';
+import ImageLazy from '@presentation/components/ui/ImageLazy.vue';
+import Borders from '@presentation/components/country/Borders.vue';
+import Page404 from '@presentation/components/common/Page404.vue';
+import CountryDetailField from '@presentation/components/country/CountryDetailField.vue';
+import { getFirstNativeName, getFirstCurrency, getLanguages, formatNumber } from '@core/domain/countryFormatters';
+import { UI_LABELS } from '@core/constants/uiLabels';
+import { useCountryDetail } from '@presentation/composables/useCountries';
 
-const { formatNumber } = useFormatting();
 
 const props = defineProps<{
   code: string;
@@ -31,13 +29,13 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-dvh pb-16">
-    <section class="max-w-[1400px] mx-auto px-5 lg:px-8 py-12">
+    <section class="max-w-(--size-container) mx-auto px-5 lg:px-8 py-12">
       <button
         @click="goBack"
         class="inline-flex items-center gap-3 px-6 py-3.5 bg-surface border border-muted/10 rounded shadow-sm text-[15px] font-semibold text-text cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-1 mb-12 focus:outline-none focus:ring-2 focus:ring-muted/50"
       >
         <ArrowLeftIcon class="w-5 h-5 text-text" />
-        <span>Back</span>
+        <span>{{ UI_LABELS.BACK }}</span>
       </button>
 
       <div v-if="loading" class="grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-16 items-start">

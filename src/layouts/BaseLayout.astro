@@ -1,6 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import Header from '../presentation/components/Header.vue';
+import Header from '@presentation/components/common/Header.vue';
 import '../app.css';
 
 interface Props {
@@ -35,7 +35,7 @@ const { title, description = 'Explore countries around the world' } = Astro.prop
   </head>
   <body class="min-h-dvh flex flex-col">
     <Header client:load />
-    <main class="grow w-full max-w-[1400px] mx-auto" transition:name="main">
+    <main class="grow w-full max-w-(--size-container) mx-auto" transition:name="main">
       <slot />
     </main>
     <script is:inline>

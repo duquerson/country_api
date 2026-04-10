@@ -10,11 +10,13 @@ export default defineConfig({
       '@core': path.resolve(__dirname, './src/core'),
       '@infrastructure': path.resolve(__dirname, './src/infrastructure'),
       '@presentation': path.resolve(__dirname, './src/presentation'),
+      'astro:actions': path.resolve(__dirname, './src/tests/setup.ts'),
     },
   },
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./src/tests/setup.ts'],
     include: ['src/tests/**/*.test.ts', 'src/tests/**/*.spec.ts'],
     coverage: {
       provider: 'v8',

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { defineComponent } from 'vue';
+import CountryDetail from '@presentation/components/country/CountryDetail.vue';
+import Card from '@presentation/components/country/Card.vue';
 
 const Page404Test = defineComponent({
   template: `

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { watch, onMounted, computed } from 'vue';
 import { ExclamationTriangleIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
-import Card from './Card.vue';
-import Button from './Button.vue';
-import { useCountries } from '../composables/useCountries';
-import { getFriendlyMessage } from '../../core/domain/errors';
-import type { CountrySummary } from '../../core/domain/types';
+import Card from '@presentation/components/country/Card.vue';
+import Button from '@presentation/components/ui/Button.vue';
+import Skeleton from '@presentation/components/ui/Skeleton.vue';
+import { useCountries } from '@presentation/composables/useCountries';
+import { getFriendlyMessage } from '@core/domain/errors';
+import type { CountrySummary } from '@core/domain/types';
+import { CONFIG } from '@core/constants/config';
+import { UI_LABELS } from '@core/constants/uiLabels';
 
 const props = defineProps<{
   query: string;
@@ -15,8 +18,7 @@ const props = defineProps<{
 
 const { countries, loading, error, fetch, setCountries } = useCountries();
 
-const numElements = 12;
-const elements = Array.from({ length: numElements }, (_, i) => i + 1);
+const elements = Array.from({ length: CONFIG.SKELETON_COUNT }, (_, i) => i + 1);
 
 const hasError = computed(() => !!error.value);
 const hasNoResults = computed(() => !loading.value && (countries.value?.length === 0) && !error.value);
@@ -43,18 +45,18 @@ onMounted(() => {
 <template>
   <div class="w-full min-h-[60vh] py-8 lg:py-12 bg-surface">
     <!-- Loading State -->
-    <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-[1400px] mx-auto">
+    <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-(--size-container) mx-auto">
       <article
         v-for="element in elements"
         :key="element"
         class="bg-surface border border-muted/10 rounded overflow-hidden"
       >
-        <div class="aspect-3/2 bg-muted/20 animate-pulse"></div>
+        <Skeleton height="200px" className="rounded-none" />
         <div class="p-6">
-          <div class="w-3/5 h-5 bg-muted/20 animate-pulse rounded mb-4"></div>
-          <div class="w-full h-3 bg-muted/20 animate-pulse rounded mb-3"></div>
-          <div class="w-full h-3 bg-muted/20 animate-pulse rounded mb-3"></div>
-          <div class="w-2/5 h-3 bg-muted/20 animate-pulse rounded"></div>
+          <Skeleton width="60%" height="20px" className="mb-4" />
+          <Skeleton width="100%" height="12px" className="mb-3" />
+          <Skeleton width="100%" height="12px" className="mb-3" />
+          <Skeleton width="40%" height="12px" />
         </div>
       </article>
     </div>
@@ -65,7 +67,7 @@ onMounted(() => {
         <ExclamationTriangleIcon class="w-12 h-12 text-terracotta dark:text-sage" />
         <p class="font-sans text-lg font-medium">{{ errorMessage }}</p>
         <Button variant="primary" @click="fetchCountries">
-          Try Again
+          {{ UI_LABELS.TRY_AGAIN }}
         </Button>
       </div>
     </div>
@@ -74,19 +76,19 @@ onMounted(() => {
     <div v-else-if="hasNoResults" class="flex justify-center items-center min-h-[400px]">
       <div class="flex flex-col items-center gap-4 text-center text-text" role="alert" aria-live="polite">
         <MagnifyingGlassIcon class="w-12 h-12 text-terracotta dark:text-sage" aria-hidden="true" />
-        <p class="font-sans text-lg font-medium">No countries found</p>
-        <span class="font-sans text-sm text-muted">Try adjusting your search or filter</span>
+        <p class="font-sans text-lg font-medium">{{ UI_LABELS.NO_RESULTS }}</p>
+        <span class="font-sans text-sm text-muted">{{ UI_LABELS.NO_RESULTS_SUBTEXT }}</span>
       </div>
     </div>
 
     <!-- Content -->
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-[1400px] mx-auto">
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-(--size-container) mx-auto">
       <Card
         v-for="(country, index) in countries"
         :key="country.cca3"
         :country="country"
         :index="index"
-        :style="{ animationDelay: `${index * 0.05}s`, animation: `fade-in-up 0.6s ease-out ${index * 0.05}s forwards` }"
+        :style="{ animationDelay: `${index * CONFIG.ANIMATION_DELAY_STEP}s`, animation: `fade-in-up 0.6s ease-out ${index * CONFIG.ANIMATION_DELAY_STEP}s forwards` }"
       />
     </div>
   </div>

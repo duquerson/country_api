@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Search from './Search.vue';
-import ListContinents from './ListContinents.vue';
-import CountryBody from './CountryBody.vue';
-import type { CountrySummary } from '../../core/domain/types';
+import Search from '@presentation/components/country/Search.vue';
+import ListContinents from '@presentation/components/country/ListContinents.vue';
+import CountryBody from '@presentation/components/country/CountryBody.vue';
+import type { CountrySummary } from '@core/domain/types';
 
 const props = defineProps<{
   initialData?: CountrySummary[];
@@ -26,7 +26,7 @@ const handleSelect = (r: string) => {
 
 <template>
   <div class="w-full bg-surface border-b border-muted/10">
-    <div class="max-w-[1400px] mx-auto py-6 px-5 lg:px-8 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+    <div class="max-w-(--size-container) mx-auto py-6 px-5 lg:px-8 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
       <div class="flex-1 min-w-[280px] max-w-full md:max-w-[420px]">
         <Search @search="handleSearch" />
       </div>

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import Card from '@presentation/components/Card.vue';
+import Card from '@presentation/components/country/Card.vue';
 
 import { getMockCountries } from './fixtures/mockData';
 import type { CountrySummary } from '@core/domain/types';

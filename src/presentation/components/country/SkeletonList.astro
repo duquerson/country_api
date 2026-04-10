@@ -1,0 +1,32 @@
+---
+import Skeleton from '@presentation/components/ui/Skeleton.vue';
+import { CONFIG } from '@core/constants/config';
+const elements = Array.from({ length: CONFIG.SKELETON_COUNT }, (_, i) => i + 1);
+---
+
+<div class="w-full bg-surface border-b border-muted/10">
+  <div class="max-w-(--size-container) mx-auto py-6 px-5 lg:px-8 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+    <div class="flex-1 min-w-[280px] max-w-full md:max-w-[420px]">
+      <Skeleton height="56px" client:load className="shadow-md" />
+    </div>
+    <div class="min-w-[180px] w-full md:w-auto">
+      <Skeleton width="192px" height="56px" client:load className="shadow-md" />
+    </div>
+  </div>
+</div>
+
+<div class="w-full min-h-[60vh] py-8 lg:py-12 bg-surface">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-(--size-container) mx-auto">
+    {elements.map((_) => (
+      <article class="bg-surface border border-muted/10 rounded overflow-hidden">
+        <Skeleton height="200px" client:load className="rounded-none" />
+        <div class="p-6">
+          <Skeleton width="60%" height="20px" client:load className="mb-4" />
+          <Skeleton width="100%" height="12px" client:load className="mb-3" />
+          <Skeleton width="100%" height="12px" client:load className="mb-3" />
+          <Skeleton width="40%" height="12px" client:load />
+        </div>
+      </article>
+    ))}
+  </div>
+</div>

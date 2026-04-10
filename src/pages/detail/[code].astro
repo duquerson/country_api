@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CountryDetail from '../../presentation/components/CountryDetail.vue';
+import CountryDetail from '@presentation/components/country/CountryDetail.vue';
 
 const { code } = Astro.params;
 const countryName = code?.toUpperCase() || '';

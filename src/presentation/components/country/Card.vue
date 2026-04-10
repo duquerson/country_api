@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { CountrySummary } from '../../core/domain/types';
-import ImageLazy from './ImageLazy.vue';
-import { useFormatting } from '../../core/domain/useFormatting';
-import { UI_LABELS } from '../../core/constants/uiLabels';
+import type { CountrySummary } from '@core/domain/types';
+import ImageLazy from '@presentation/components/ui/ImageLazy.vue';
+import { formatNumber } from '@core/domain/countryFormatters';
+import { UI_LABELS } from '@core/constants/uiLabels';
+import { CONFIG } from '@core/constants/config';
 
 const props = defineProps<{
   country: CountrySummary;
   index?: number;
 }>();
 
-const { formatNumber } = useFormatting();
 const countryCode = props.country.cca3.toLowerCase();
-const isAboveFold = props.index !== undefined && props.index < 8;
+const isAboveFold = props.index !== undefined && props.index < CONFIG.ABOVE_FOLD_THRESHOLD;
 </script>
 
 <template>
