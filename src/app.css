@@ -12,6 +12,8 @@
   --color-terracotta: #C47D5F;
   --color-sage: #7A8B6E;
 
+  --size-container: 1400px;
+
   --font-sans: 'Nunito Sans', sans-serif;
 
   --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;

@@ -8,4 +8,12 @@ export const UI_LABELS = {
   CURRENCIES: 'Currencies:',
   LANGUAGES: 'Languages:',
   BORDER_COUNTRIES: 'Border Countries:',
+  SEARCH_PLACEHOLDER: 'Search for a country...',
+  FILTER_BY_REGION: 'Filter by Region',
+  NO_RESULTS: 'No countries found',
+  NO_RESULTS_SUBTEXT: 'Try adjusting your search or filter',
+  TRY_AGAIN: 'Try Again',
+  BACK: 'Back',
+  CLEAR_FILTER: 'Clear filter',
+  LOADING: 'Loading...',
 } as const;
