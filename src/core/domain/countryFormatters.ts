@@ -8,7 +8,7 @@ export const getFirstNativeName = (country: Country): string => {
 
 export const getFirstCurrency = (country: Country): string => {
     const key = Object.keys(country.currencies || {})[0];
-    return key ? country.currencies[key].name : 'N/A';
+    return key ? (country.currencies?.[key]?.name ?? 'N/A') : 'N/A';
 };
 
 export const getLanguages = (country: Country): string => {
