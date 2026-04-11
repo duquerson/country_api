@@ -247,3 +247,4 @@ $RECYCLE.BIN/
 skills-lock.json
 playwright-report/
 test-results/
+.agents/
