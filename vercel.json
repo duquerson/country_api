@@ -1,0 +1,1 @@
+{\n  "installCommand": "pnpm install --no-bin-links",\n  "buildCommand": "pnpm run build"\n}\n
