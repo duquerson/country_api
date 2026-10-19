@@ -21,6 +21,7 @@ onMounted(async () => {
   loading.value = false;
 });
 
+// v5: codes.alpha_3
 const handle_click = (code: string) => {
   window.location.href = `/detail/${code.toLowerCase()}`;
 };
@@ -33,12 +34,13 @@ const handle_click = (code: string) => {
     </div>
     <Badge
       v-for="country in borderCountries"
-      :key="country.cca3"
+      :key="country.codes.alpha_3"
       clickable
-      @click="() => handle_click(country.cca3)"
+      @click="() => handle_click(country.codes.alpha_3)"
       class="group"
     >
-      <span>{{ country.name.common }}</span>
+      <!-- v5: names.common -->
+      <span>{{ country.names.common }}</span>
       <template #icon-right>
         <ArrowRightIcon class="w-3.5 h-3.5 opacity-50 transition-transform duration-300 group-hover:translate-x-1" />
       </template>

@@ -53,14 +53,16 @@ onMounted(async () => {
       </div>
 
       <section v-else-if="country" class="grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-16 items-start">
+        <!-- v5: flag.url_svg / flag.emoji -->
         <div class="relative w-full rounded overflow-hidden shadow-sm" :style="{ viewTransitionName: 'country-flag-' + code }">
-          <ImageLazy :countryFlag="country.flags.svg" :countryAlt="country.flags.alt" :priority="true" />
+          <ImageLazy :countryFlag="country.flag.url_svg" :countryAlt="country.flag.emoji" :priority="true" />
           <div class="absolute bottom-0 left-0 w-16 h-1 bg-linear-to-r from-muted to-muted/50 hidden"></div>
         </div>
 
         <div class="pt-4 lg:pt-10">
+          <!-- v5: names.common / names.official -->
           <article class="flex items-baseline gap-4 mb-8 pb-6 border-b border-muted/10">
-            <h2 class="font-sans text-[2rem] lg:text-[2.5rem] font-extrabold text-text leading-tight">{{ country.name.common }}</h2>
+            <h2 class="font-sans text-[2rem] lg:text-[2.5rem] font-extrabold text-text leading-tight">{{ country.names.common }}</h2>
           </article>
 
           <div class="grid md:grid-cols-2 gap-y-8 gap-x-16 mb-12">
@@ -77,16 +79,18 @@ onMounted(async () => {
               <CountryDetailField :label="UI_LABELS.SUB_REGION">
                 {{ country.subregion || 'N/A' }}
               </CountryDetailField>
+              <!-- v5: capitals[0].name -->
               <div class="flex items-baseline gap-2 text-[15px]">
                 <span class="font-semibold text-text">{{ UI_LABELS.CAPITAL }}</span>
-                <span class="text-text font-light">{{ country.capital?.[0] || 'N/A' }}</span>
+                <span class="text-text font-light">{{ country.capitals?.[0]?.name || 'N/A' }}</span>
               </div>
             </div>
 
             <div class="flex flex-col gap-4">
+              <!-- v5: tlds -->
               <div class="flex items-baseline gap-2 text-[15px]">
                 <span class="font-semibold text-text">{{ UI_LABELS.TOP_LEVEL_DOMAIN }}</span>
-                <span class="text-text font-light">{{ country.tld?.[0] || 'N/A' }}</span>
+                <span class="text-text font-light">{{ country.tlds?.[0] || 'N/A' }}</span>
               </div>
               <div class="flex items-baseline gap-2 text-[15px]">
                 <span class="font-semibold text-text">{{ UI_LABELS.CURRENCIES }}</span>

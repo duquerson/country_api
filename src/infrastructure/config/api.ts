@@ -1,7 +1,7 @@
-// Centraliza las URLs y campos de API REST Countries
-const DEFAULT_API_URL = 'https://restcountries.com/v3.1';
+// Centraliza las URLs y campos de API REST Countries v5
+const DEFAULT_API_URL = 'https://api.restcountries.com/countries/v5';
 
-const ALLOWED_DOMAINS = ['restcountries.com'];
+const ALLOWED_DOMAINS = ['api.restcountries.com'];
 
 const isValidUrl = (url: string): boolean => {
   try {
@@ -17,7 +17,8 @@ const isValidUrl = (url: string): boolean => {
 };
 
 const getApiUrl = (): string => {
-  const envUrl = import.meta.env.PUBLIC_API_URL;
+  // NUNCA usar PUBLIC_ — la key es solo del servidor
+  const envUrl = import.meta.env.API_URL;
   if (!envUrl) return DEFAULT_API_URL;
 
   if (!isValidUrl(envUrl)) {
@@ -29,14 +30,18 @@ const getApiUrl = (): string => {
 
 export const API_URL = getApiUrl();
 
+// La clave de API se lee solo en el servidor (sin prefijo PUBLIC_)
+export const API_KEY: string = import.meta.env.RESTCOUNTRIES_API_KEY ?? '';
+
+// Nombres de campos v5 (param ?response_fields=)
 export const COUNTRY_FIELDS = {
-  SUMMARY: 'name,capital,region,population,flags,cca3',
+  SUMMARY: 'names.common,capitals,region,population,flag,codes.alpha_3',
   DETAIL:
-    'name,capital,region,population,flags,cca3,borders,currencies,languages,subregion,tld,nativeName',
+    'names,capitals,region,population,flag,codes,borders,currencies,languages,subregion,tlds',
 };
 
 export const HTTP_TIMEOUTS = {
-    STANDARD: 10000,
-    RETRIES: 3,
-    RETRY_DELAY: 1000,
+  STANDARD: 10000,
+  RETRIES: 3,
+  RETRY_DELAY: 1000,
 };

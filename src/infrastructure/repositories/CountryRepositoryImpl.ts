@@ -2,8 +2,8 @@ import type { CountryRepository } from '../../core/interfaces/Repository';
 import type { Country, CountrySummary } from '../../core/domain/types';
 import { AppError } from '../../core/domain/errors';
 import {
-  countryListSchema,
-  countrySummaryListSchema,
+  apiResponseSchema,
+  apiSummaryResponseSchema,
 } from '../../core/domain/schemas';
 
 import { fetchWithRetry } from '../http/fetchWithRetry';
@@ -18,24 +18,27 @@ class CountryRepositoryImpl implements CountryRepository {
     const cached = getCached<CountrySummary[]>(cacheKey);
     if (cached) return cached;
 
-    const response = await fetchWithRetry(`${API_URL}/all?fields=${COUNTRY_FIELDS.SUMMARY}`, {
-      timeout: HTTP_TIMEOUTS.STANDARD,
-      retries: HTTP_TIMEOUTS.RETRIES,
-    });
+    const response = await fetchWithRetry(
+      `${API_URL}?response_fields=${COUNTRY_FIELDS.SUMMARY}`,
+      {
+        timeout: HTTP_TIMEOUTS.STANDARD,
+        retries: HTTP_TIMEOUTS.RETRIES,
+      }
+    );
 
     if (!response.ok) {
-      throw AppError.network(response.status, '/all');
+      throw AppError.network(response.status, '/countries/v5');
     }
 
-    const data = await response.json();
-    const parsed = countrySummaryListSchema.safeParse(data);
+    const raw = await response.json();
+    const parsed = apiSummaryResponseSchema.safeParse(raw);
 
     if (!parsed.success) {
       throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    setCache(cacheKey, parsed.data);
-    return parsed.data;
+    setCache(cacheKey, parsed.data.data);
+    return parsed.data.data;
   }
 
   async getCountryByCode(code: string): Promise<Country> {
@@ -44,7 +47,8 @@ class CountryRepositoryImpl implements CountryRepository {
     const cached = getCached<Country>(cacheKey);
     if (cached) return cached;
 
-    const url = `${API_URL}/alpha/${encodeURIComponent(normalizedCode)}?fields=${COUNTRY_FIELDS.DETAIL}`;
+    // v5: /countries/v5/codes.alpha_3/{CODE}
+    const url = `${API_URL}/codes.alpha_3/${encodeURIComponent(normalizedCode)}?response_fields=${COUNTRY_FIELDS.DETAIL}`;
     const response = await fetchWithRetry(url, {
       timeout: HTTP_TIMEOUTS.STANDARD,
       retries: HTTP_TIMEOUTS.RETRIES,
@@ -54,17 +58,27 @@ class CountryRepositoryImpl implements CountryRepository {
       if (response.status === 404) {
         throw AppError.notFound('Country', normalizedCode);
       }
-      throw AppError.network(response.status, `/alpha/${normalizedCode}`);
+      throw AppError.network(response.status, `/codes.alpha_3/${normalizedCode}`);
     }
 
-    const data = await response.json();
-    const parsed = countryListSchema.safeParse(Array.isArray(data) ? data : [data]);
+    const raw = await response.json();
 
-    if (!parsed.success || !parsed.data[0]) {
+    // v5 /codes.alpha_3/{CODE} puede devolver { data: {...} } (objeto único) o
+    // el wrapper { data: [...] } con un elemento — normalizamos a array
+    let dataArray: unknown[];
+    if (raw && typeof raw === 'object' && 'data' in raw) {
+      dataArray = Array.isArray(raw.data) ? raw.data : [raw.data];
+    } else {
+      dataArray = Array.isArray(raw) ? raw : [raw];
+    }
+
+    const parsed = apiResponseSchema.safeParse({ data: dataArray });
+
+    if (!parsed.success || !parsed.data.data[0]) {
       throw AppError.notFound('Country', normalizedCode);
     }
 
-    const country = parsed.data[0];
+    const country = parsed.data.data[0];
     setCache(cacheKey, country);
     return country;
   }
@@ -73,8 +87,9 @@ class CountryRepositoryImpl implements CountryRepository {
     const sanitized = query.trim();
     if (!sanitized) return this.getAllCountries();
 
+    // v5: búsqueda con ?q=
     const response = await fetchWithRetry(
-      `${API_URL}/name/${encodeURIComponent(sanitized)}?fields=${COUNTRY_FIELDS.SUMMARY}`,
+      `${API_URL}?q=${encodeURIComponent(sanitized)}&response_fields=${COUNTRY_FIELDS.SUMMARY}`,
       {
         timeout: HTTP_TIMEOUTS.STANDARD,
         retries: HTTP_TIMEOUTS.RETRIES,
@@ -83,21 +98,23 @@ class CountryRepositoryImpl implements CountryRepository {
 
     if (!response.ok) {
       if (response.status === 404) return [];
-      throw AppError.network(response.status, `/name/${sanitized}`);
+      throw AppError.network(response.status, `/countries/v5?q=${sanitized}`);
     }
 
-    const data = await response.json();
-    const parsed = countrySummaryListSchema.safeParse(data);
+    const raw = await response.json();
+    const parsed = apiSummaryResponseSchema.safeParse(raw);
 
-    return parsed.success ? parsed.data : [];
+    if (!parsed.success) return [];
+    return parsed.data.data;
   }
 
   async filterByRegion(region: string): Promise<CountrySummary[]> {
     const sanitized = region.trim();
     if (!sanitized) return this.getAllCountries();
 
+    // v5: filtro con ?region=
     const response = await fetchWithRetry(
-      `${API_URL}/region/${encodeURIComponent(sanitized)}?fields=${COUNTRY_FIELDS.SUMMARY}`,
+      `${API_URL}?region=${encodeURIComponent(sanitized)}&response_fields=${COUNTRY_FIELDS.SUMMARY}`,
       {
         timeout: HTTP_TIMEOUTS.STANDARD,
         retries: HTTP_TIMEOUTS.RETRIES,
@@ -105,17 +122,17 @@ class CountryRepositoryImpl implements CountryRepository {
     );
 
     if (!response.ok) {
-      throw AppError.network(response.status, `/region/${sanitized}`);
+      throw AppError.network(response.status, `/countries/v5?region=${sanitized}`);
     }
 
-    const data = await response.json();
-    const parsed = countrySummaryListSchema.safeParse(data);
+    const raw = await response.json();
+    const parsed = apiSummaryResponseSchema.safeParse(raw);
 
     if (!parsed.success) {
       throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    return parsed.data;
+    return parsed.data.data;
   }
 }
 

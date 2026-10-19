@@ -1,112 +1,62 @@
 # REST Countries API - Where in the world?
 
-This is a solution to the [REST Countries API with color theme switcher challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
+Solution to the [REST Countries API challenge](https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca).
 
 ![Astro][astro-badge] ![Vue][vue-badge] ![Tailwind][tailwind-badge] ![TypeScript][ts-badge]
 
-🌍 **Live Demo:** [https://country-api-eight-wheat.vercel.app](https://country-api-eight-wheat.vercel.app)
-
-## 📋 Table of contents
-
-- [Overview](#overview)
-  - [The challenge](#the-challenge)
-  - [Screenshot](#screenshot)
-  - [Links](#links)
-- [My process](#my-process)
-  - [Built with](#built-with)
-  - [Architecture (Clean Architecture)](#architecture-clean-architecture)
-- [Author](#author)
+Live Demo: https://country-api-eight-wheat.vercel.app
 
 ## Overview
 
-### The challenge
+Users can search countries, filter by region, view detail pages and toggle dark/light mode.
 
-Your challenge is to integrate with the [REST Countries API](https://restcountries.com) to pull country data and display it like in the designs.
+## Built with
 
-Users should be able to:
+- **Astro 7** - SSR + Islands Architecture
+- **Vue 3** (Composition API) - Interactive components
+- **Tailwind CSS v4** - Utility CSS
+- **Zod v4** - Schema validation
+- **TypeScript 5.9**
 
-- See all countries from the API on the homepage
-- Search for a country using an input field
-- Filter countries by region
-- Click on a country to see more detailed information on a separate page
-- Click through to the border countries on the detail page
-- Toggle the color scheme between light and dark mode
+> **API:** Migrated from REST Countries v3.1 (retired) to **v5** (`api.restcountries.com/countries/v5`).
+> The `RESTCOUNTRIES_API_KEY` is used server-side only via Astro Actions — never exposed to the browser.
 
-### Screenshot
+## Setup
 
-| Desktop Preview | Mobile Preview |
-| :---: | :---: |
-| ![Desktop](./design/desktop-preview.jpg) | ![Mobile](./design/mobile-preview.jpg) |
+1. Copy `.env.example` to `.env` and fill in `RESTCOUNTRIES_API_KEY`
+   (Get a free key at https://restcountries.com/sign-up)
+2. `pnpm install`
+3. `pnpm run dev`
 
-*(Note: Add your actual screenshots if available)*
+## Scripts
 
-### Links
+| Command | Description |
+|---|---|
+| `pnpm run dev` | Development server |
+| `pnpm run build` | Production build |
+| `pnpm run test:run` | Unit tests (Vitest 5, 52 tests) |
+| `pnpm run e2e` | E2E tests (Playwright) |
+| `pnpm run typecheck` | TypeScript check |
+| `pnpm run lint` | ESLint |
 
-- Solution URL: [GitHub Repository](https://github.com/duquerson/country_api)
-- Live Site URL: [Vercel Deployment](https://country-api-eight-wheat.vercel.app)
-
-## My process
-
-### Built with
-
-- **Astro 6** - Framework for content-driven websites with Islands Architecture.
-- **Vue 3** (Composition API) - For interactive components.
-- **Tailwind CSS v4** - Modern CSS utility framework.
-- **Zod** - Robust schema validation.
-- **Flexbox & CSS Grid** - Layout systems.
-- **Mobile-first workflow** - Responsive design strategy.
-- **SSR (Server-Side Rendering)** - For instant load times and optimal SEO.
-
-### Architecture (Clean Architecture)
-
-The project follows a simplified **Clean Architecture** pattern to ensure maintainability, testability, and scalability:
+## Architecture (Clean Architecture)
 
 ```
 src/
-├── core/             # Core Domain (SSOT)
-│   ├── domain/       # Types, Schemas (Zod) and Centralized Errors
-│   ├── interfaces/   # Ports (Repository definitions)
-│   └── use-cases/    # Unified Business Logic (e.g. GetCountries)
-├── infrastructure/   # Data Adapters
-│   ├── cache/        # In-memory optimization
-│   ├── http/         # Core fetch with Retry & Timeout logic
-│   └── repositories/ # Concrete API implementations
-├── presentation/    # Presentation Layer
-│   ├── components/   # Vue components
-│   └── composables/  # Generic reactive hooks (useAsync)
-├── actions/          # Astro Actions (Bridges)
-├── pages/            # Astro Routes (SSR Entry points)
-└── layouts/          # Base layouts
-```
-
-### Key Optimizations:
-- **Centralization**: Types and validation schemas consolidated in `src/core/domain`.
-- **SSR Integration**: Initial data fetching happens on the server, eliminating layout shifts and improving UX.
-- **Intelligent Caching**: Infrastructure-level caching to reduce API calls and improve performance.
-- **Full Accessibility**: ARIA attributes and keyboard navigation fully implemented.
-
-## 📦 Scripts
-
-```bash
-pnpm dev          # Run development server
-pnpm build        # Build for production (Vercel/Node)
-pnpm test         # Run unit tests (Vitest)
-pnpm e2e          # Run E2E tests (Playwright)
++-- core/             # Domain: Types, Zod v4 Schemas, Errors, Use Cases
++-- infrastructure/   # HTTP (auth header), Cache, Repositories (v5)
++-- presentation/     # Vue components and composables
++-- actions/          # Astro Actions (API key stays server-side)
++-- pages/            # SSR routes with visible error propagation
 ```
 
 ## Author
 
-- GitHub - [Duquerson](https://github.com/duquerson)
-- Frontend Mentor - [@Duquerson](https://www.frontendmentor.io/profile/Duquerson)
-- LinkedIn - [Duquerson](https://www.linkedin.com/in/duquerson)
+- GitHub: https://github.com/duquerson
+- Frontend Mentor: https://www.frontendmentor.io/profile/Duquerson
+- LinkedIn: https://www.linkedin.com/in/duquerson
 
-## Acknowledgments
-
-It was fun to build it! 🚀 If you like the code, feel free to follow me. 👋
-
----
-
-[astro-badge]: https://img.shields.io/badge/Astro-6.1.3-FF6D00?style=flat&logo=astro
-[vue-badge]: https://img.shields.io/badge/Vue-3.5.25-42B883?style=flat&logo=vue.js
-[tailwind-badge]: https://img.shields.io/badge/Tailwind-4.2.2-06B6D1?style=flat&logo=tailwind-css
-[ts-badge]: https://img.shields.io/badge/TypeScript-5.6.3-3178C6?style=flat&logo=typescript
+[astro-badge]: https://img.shields.io/badge/Astro-7.4.1-FF6D00?style=flat&logo=astro
+[vue-badge]: https://img.shields.io/badge/Vue-3.5.44-42B883?style=flat&logo=vue.js
+[tailwind-badge]: https://img.shields.io/badge/Tailwind-4.3.3-06B6D1?style=flat&logo=tailwind-css
+[ts-badge]: https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat&logo=typescript

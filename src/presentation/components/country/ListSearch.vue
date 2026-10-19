@@ -7,6 +7,7 @@ import type { CountrySummary } from '@core/domain/types';
 
 const props = defineProps<{
   initialData?: CountrySummary[];
+  initialError?: string | null;
 }>();
 
 const query = ref('');
@@ -39,5 +40,6 @@ const handleSelect = (r: string) => {
     :query="query" 
     :region="region" 
     :initial-data="props.initialData"
+    :initial-error="props.initialError"
   />
 </template>

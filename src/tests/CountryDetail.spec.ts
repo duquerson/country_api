@@ -3,9 +3,10 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { defineComponent } from 'vue';
 
 import { getMockCountries } from './fixtures/mockData';
-import CountryDetail from '@presentation/components/country/CountryDetail.vue';
 import type { Country } from '@core/domain/types';
 
+// Componente de prueba que simula el comportamiento de CountryDetail
+// sin depender de Astro Actions ni Vue Router
 const CountryDetailTest = defineComponent({
   props: {
     code: { type: String, required: true },
@@ -16,11 +17,11 @@ const CountryDetailTest = defineComponent({
       <div v-if="loading" class="loading">Loading...</div>
       <div v-else-if="error" class="error">Error</div>
       <div v-else-if="country" class="country-detail">
-        <h2>{{ country.name.common }}</h2>
+        <h2>{{ country.names.common }}</h2>
         <p>Population: {{ country.population.toLocaleString('en-US') }}</p>
         <p>Region: {{ country.region }}</p>
-        <p>Capital: {{ country.capital?.[0] || 'N/A' }}</p>
-        <p>Native Name: {{ Object.values(country.name.nativeName)[0]?.common }}</p>
+        <p>Capital: {{ country.capitals?.[0]?.name || 'N/A' }}</p>
+        <p>Native Name: {{ Object.values(country.names.native ?? {})[0]?.common }}</p>
       </div>
     </div>
   `,
@@ -34,7 +35,7 @@ const CountryDetailTest = defineComponent({
     async fetchCountry() {
       try {
         const countries = getMockCountries();
-        this.country = countries.find((c: any) => c.cca3 === 'COL');
+        this.country = countries.find((c: Country) => c.codes.alpha_3 === 'COL') ?? null;
       } catch {
         this.error = true;
       } finally {
@@ -53,7 +54,7 @@ describe('CountryDetail Component', () => {
     expect(wrapper.find('.loading').exists()).toBe(true);
   });
 
-  it('should render country details after loading', async () => {
+  it('should render country details after loading (v5 structure)', async () => {
     const wrapper = mount(CountryDetailTest, { props: { code: 'COL' } });
     await flushPromises();
 

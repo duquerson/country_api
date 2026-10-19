@@ -4,19 +4,19 @@ import {
   countrySummarySchema, 
 } from './schemas';
 
-// --- Domain Types ---
+// --- Domain Types (inferidos de los schemas v5) ---
 
 export type Country = z.infer<typeof countrySchema>;
 export type CountrySummary = z.infer<typeof countrySummarySchema>;
 
-// Helper to convert Country to Summary
+// Convierte un Country completo a CountrySummary para listas
 export function toCountrySummary(country: Country): CountrySummary {
   return {
-    cca3: country.cca3,
-    name: { common: country.name.common },
-    capital: country.capital,
+    codes: { alpha_3: country.codes.alpha_3 },
+    names: { common: country.names.common },
+    capitals: country.capitals,
     region: country.region,
     population: country.population,
-    flags: { svg: country.flags.svg, alt: country.flags.alt },
+    flag: { url_svg: country.flag.url_svg, emoji: country.flag.emoji },
   };
 }
