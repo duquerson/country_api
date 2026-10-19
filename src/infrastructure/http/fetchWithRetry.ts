@@ -1,5 +1,5 @@
 import { AppError } from '../../core/domain/errors';
-import { HTTP_TIMEOUTS } from '../config/api';
+import { HTTP_TIMEOUTS, API_KEY } from '../config/api';
 
 export interface FetchOptions extends RequestInit {
   timeout?: number;
@@ -19,8 +19,19 @@ export async function fetchWithRetry(
     timeout = DEFAULT_TIMEOUT,
     retries = DEFAULT_RETRIES,
     retryDelay = DEFAULT_RETRY_DELAY,
+    headers: optionHeaders,
     ...init
   } = options;
+
+  // Inyectar el header de autenticación — la clave nunca se expone al cliente
+  const authHeaders: HeadersInit = API_KEY
+    ? { Authorization: `Bearer ${API_KEY}` }
+    : {};
+
+  const mergedHeaders = {
+    ...authHeaders,
+    ...(optionHeaders as Record<string, string> | undefined),
+  };
 
   let lastError: Error | AppError | unknown;
 
@@ -31,6 +42,7 @@ export async function fetchWithRetry(
     try {
       const response = await fetch(url, {
         ...init,
+        headers: mergedHeaders,
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
@@ -51,4 +63,3 @@ export async function fetchWithRetry(
 
   throw AppError.network(0, url, lastError instanceof Error ? lastError : undefined);
 }
-
