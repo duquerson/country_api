@@ -1,59 +1,89 @@
 import { z } from 'zod';
 
-// --- Domain Schemas ---
+// --- Schemas de dominio (estructura REST Countries v5) ---
 
+// v5: names.native -> Record<langCode, { common, official }>
 export const nativeNameSchema = z.object({
   common: z.string(),
   official: z.string(),
 });
 
+// v5: currencies es un array [{ code, name, symbol }]
 export const currencySchema = z.object({
+  code: z.string(),
   name: z.string(),
   symbol: z.string(),
 });
 
-export const languageSchema = z.string();
-
-export const flagSchema = z.object({
-  svg: z.string().url(),
-  png: z.string().url().optional(),
-  alt: z.string().optional(),
+// v5: languages es un array [{ name, bcp47 }]
+export const languageSchema = z.object({
+  name: z.string(),
+  bcp47: z.string().optional(),
 });
 
+// v5: capitals es un array [{ name, primary, coordinates? }]
+export const capitalSchema = z.object({
+  name: z.string(),
+  primary: z.boolean().optional(),
+});
+
+// v5: flag -> { url_svg, url_png, emoji }
+export const flagSchema = z.object({
+  url_svg: z.string().url(),
+  url_png: z.string().url().optional(),
+  emoji: z.string().optional(),
+});
+
+// v5: codes -> { alpha_2, alpha_3, ... }
+export const codesSchema = z.object({
+  alpha_3: z.string(),
+  alpha_2: z.string().optional(),
+});
+
+// Schema completo para la vista de detalle (v5)
 export const countrySchema = z.object({
-  name: z.object({
+  names: z.object({
     common: z.string(),
     official: z.string(),
-    nativeName: z.record(z.string(), nativeNameSchema),
+    native: z.record(z.string(), nativeNameSchema).optional(),
   }),
-  capital: z.array(z.string()).default([]),
+  capitals: z.array(capitalSchema).default([]),
   region: z.string(),
   subregion: z.string().optional(),
   population: z.number().int().min(0),
-  flags: flagSchema,
-  tld: z.array(z.string()).default([]),
-  currencies: z.record(z.string(), currencySchema).optional(),
-  languages: z.record(z.string(), languageSchema).optional(),
+  flag: flagSchema,
+  tlds: z.array(z.string()).default([]),
+  currencies: z.array(currencySchema).optional(),
+  languages: z.array(languageSchema).optional(),
   borders: z.array(z.string()).default([]),
-  cca3: z.string(),
-  cca2: z.string().optional(),
+  codes: codesSchema,
   continents: z.array(z.string()).default([]),
   timezones: z.array(z.string()).default([]),
 });
 
+// Schema resumido para la lista/búsqueda/filtro (v5)
 export const countrySummarySchema = z.object({
-  cca3: z.string(),
-  name: z.object({ common: z.string() }),
-  capital: z.array(z.string()).default([]),
+  codes: z.object({ alpha_3: z.string() }),
+  names: z.object({ common: z.string() }),
+  capitals: z.array(capitalSchema).default([]),
   region: z.string(),
   population: z.number().int().min(0),
-  flags: z.object({ svg: z.string().url(), alt: z.string().optional() }),
+  flag: z.object({ url_svg: z.string().url(), emoji: z.string().optional() }),
+});
+
+// Wrapper de respuesta v5: { data: [...], meta: {...} }
+export const apiResponseSchema = z.object({
+  data: z.array(countrySchema),
+});
+
+export const apiSummaryResponseSchema = z.object({
+  data: z.array(countrySummarySchema),
 });
 
 export const countryListSchema = z.array(countrySchema);
 export const countrySummaryListSchema = z.array(countrySummarySchema);
 
-// --- Action / Input Schemas ---
+// --- Schemas de entrada para Actions ---
 
 export const countryCodeSchema = z.object({
   code: z.string()
@@ -77,7 +107,7 @@ export const regionSchema = z.object({
   ).optional().or(z.literal('')),
 });
 
-// Combined filter schema
+// Schema combinado de filtros
 export const countryFilterSchema = z.object({
   query: z.string().optional(),
   region: z.string().optional(),
