@@ -15,20 +15,23 @@ describe('GetCountryByCode Use Case', () => {
     vi.clearAllMocks();
   });
 
-  it('should return country by code', async () => {
+  it('should return country by code (v5 structure)', async () => {
     const expectedCountry: Country = {
-      name: { common: 'Spain', official: 'Kingdom of Spain', nativeName: { spa: { common: 'España', official: 'Reino de España' } } },
-      capital: ['Madrid'],
+      names: {
+        common: 'Spain',
+        official: 'Kingdom of Spain',
+        native: { spa: { common: 'España', official: 'Reino de España' } },
+      },
+      capitals: [{ name: 'Madrid', primary: true }],
       region: 'Europe',
       subregion: 'Southern Europe',
       population: 47000000,
-      flags: { svg: 'flag.svg', png: 'flag.png', alt: 'flag of Spain' },
-      tld: ['.es'],
-      currencies: { EUR: { name: 'Euro', symbol: '€' } },
-      languages: { spa: 'Spanish' },
+      flag: { url_svg: 'https://flags.restcountries.com/v5/svg/es.svg', emoji: '🇪🇸' },
+      tlds: ['.es'],
+      currencies: [{ code: 'EUR', name: 'Euro', symbol: '€' }],
+      languages: [{ name: 'Spanish', bcp47: 'es' }],
       borders: ['FRA', 'PRT'],
-      cca3: 'ESP',
-      cca2: 'ES',
+      codes: { alpha_3: 'ESP', alpha_2: 'ES' },
       continents: ['Europe'],
       timezones: ['UTC+01:00'],
     };
@@ -39,5 +42,7 @@ describe('GetCountryByCode Use Case', () => {
 
     expect(result).toEqual(expectedCountry);
     expect(mockRepository.getCountryByCode).toHaveBeenCalledWith('ESP');
+    expect(result.names.common).toBe('Spain');
+    expect(result.codes.alpha_3).toBe('ESP');
   });
 });
