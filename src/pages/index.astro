@@ -26,8 +26,8 @@ try {
   <ListSearch
     server:defer
     client:load
-    :initial-data="initialCountries"
-    :initial-error="initialError"
+    initialData={initialCountries}
+    initialError={initialError}
   >
     <SkeletonList slot="fallback" />
   </ListSearch>
