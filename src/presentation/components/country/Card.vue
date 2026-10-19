@@ -10,8 +10,14 @@ const props = defineProps<{
   index?: number;
 }>();
 
-const countryCode = props.country.cca3.toLowerCase();
+// v5: codes.alpha_3
+const countryCode = props.country.codes.alpha_3.toLowerCase();
 const isAboveFold = props.index !== undefined && props.index < CONFIG.ABOVE_FOLD_THRESHOLD;
+
+// v5: capitals es array de objetos [{ name, primary }]
+const capitalDisplay = props.country.capitals?.length
+  ? props.country.capitals.map((c) => c.name).join(', ')
+  : 'None';
 </script>
 
 <template>
@@ -23,15 +29,15 @@ const isAboveFold = props.index !== undefined && props.index < CONFIG.ABOVE_FOLD
 
     <div class="aspect-3/2 bg-muted/20 relative overflow-hidden">
       <ImageLazy
-        :countryFlag="country.flags.svg"
-        :countryAlt="country.flags.alt || country.name.common"
+        :countryFlag="country.flag.url_svg"
+        :countryAlt="country.flag.emoji || country.names.common"
         :priority="isAboveFold"
       />
     </div>
 
     <div class="p-6 pb-8">
-      <h2 class="text-lg font-extrabold text-text mb-4 leading-tight drop-shadow-sm line-clamp-1" :title="country.name.common">
-        {{ country.name.common }}
+      <h2 class="text-lg font-extrabold text-text mb-4 leading-tight drop-shadow-sm line-clamp-1" :title="country.names.common">
+        {{ country.names.common }}
       </h2>
 
       <div class="flex flex-col gap-2">
@@ -47,8 +53,8 @@ const isAboveFold = props.index !== undefined && props.index < CONFIG.ABOVE_FOLD
         
         <div class="flex items-baseline gap-1 text-[14px]">
           <span class="font-semibold text-text">{{ UI_LABELS.CAPITAL }}</span>
-          <span class="text-text font-light truncate" :title="country.capital.join(', ')">
-            {{ country.capital?.length ? country.capital.join(', ') : 'None' }}
+          <span class="text-text font-light truncate" :title="capitalDisplay">
+            {{ capitalDisplay }}
           </span>
         </div>
       </div>
