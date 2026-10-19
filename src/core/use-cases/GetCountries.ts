@@ -12,26 +12,27 @@ export class GetCountries {
   async execute(filters: GetCountriesFilters = {}): Promise<CountrySummary[]> {
     const { query, region } = filters;
 
-    // Both query and region
+    // Ambos: filtrar por región y luego buscar por nombre en el resultado
     if (query && region) {
       const regionResults = await this.repository.filterByRegion(region);
       const searchTerm = query.toLowerCase();
-      return regionResults.filter(c => 
-        c.name.common.toLowerCase().includes(searchTerm)
+      // v5: names.common
+      return regionResults.filter(c =>
+        c.names.common.toLowerCase().includes(searchTerm)
       );
     }
 
-    // Only region
+    // Solo región
     if (region) {
       return this.repository.filterByRegion(region);
     }
 
-    // Only query
+    // Solo búsqueda
     if (query) {
       return this.repository.searchCountries(query);
     }
 
-    // Default: all
+    // Todos los países
     return this.repository.getAllCountries();
   }
 }
