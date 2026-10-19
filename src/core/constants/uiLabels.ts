@@ -12,6 +12,7 @@ export const UI_LABELS = {
   FILTER_BY_REGION: 'Filter by Region',
   NO_RESULTS: 'No countries found',
   NO_RESULTS_SUBTEXT: 'Try adjusting your search or filter',
+  ERROR_SUBTEXT: 'The country data could not be loaded. Please check your connection and try again.',
   TRY_AGAIN: 'Try Again',
   BACK: 'Back',
   CLEAR_FILTER: 'Clear filter',
