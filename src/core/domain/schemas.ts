@@ -29,8 +29,8 @@ export const capitalSchema = z.object({
 
 // v5: flag -> { url_svg, url_png, emoji }
 export const flagSchema = z.object({
-  url_svg: z.string().url(),
-  url_png: z.string().url().optional(),
+  url_svg: z.string().url().or(z.literal('')),
+  url_png: z.string().url().or(z.literal('')).optional(),
   emoji: z.string().optional(),
 });
 
@@ -68,16 +68,22 @@ export const countrySummarySchema = z.object({
   capitals: z.array(capitalSchema).default([]),
   region: z.string(),
   population: z.number().int().min(0),
-  flag: z.object({ url_svg: z.string().url(), emoji: z.string().optional() }),
+  flag: z.object({ url_svg: z.string().url().or(z.literal('')), emoji: z.string().optional() }),
 });
 
-// Wrapper de respuesta v5: { data: [...], meta: {...} }
+// Wrapper de respuesta v5: { data: { objects: [...], meta: {...} } }
 export const apiResponseSchema = z.object({
-  data: z.array(countrySchema),
+  data: z.object({
+    objects: z.array(countrySchema),
+    meta: z.record(z.any()).optional(),
+  }),
 });
 
 export const apiSummaryResponseSchema = z.object({
-  data: z.array(countrySummarySchema),
+  data: z.object({
+    objects: z.array(countrySummarySchema),
+    meta: z.record(z.any()).optional(),
+  }),
 });
 
 export const countryListSchema = z.array(countrySchema);

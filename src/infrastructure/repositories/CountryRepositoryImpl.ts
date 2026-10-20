@@ -37,8 +37,10 @@ class CountryRepositoryImpl implements CountryRepository {
       throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    setCache(cacheKey, parsed.data.data);
-    return parsed.data.data;
+    // Filtrar países sin código alpha_3 válido
+    const validCountries = parsed.data.data.objects.filter(c => c.codes.alpha_3);
+    setCache(cacheKey, validCountries);
+    return validCountries;
   }
 
   async getCountryByCode(code: string): Promise<Country> {
@@ -63,22 +65,22 @@ class CountryRepositoryImpl implements CountryRepository {
 
     const raw = await response.json();
 
-    // v5 /codes.alpha_3/{CODE} puede devolver { data: {...} } (objeto único) o
-    // el wrapper { data: [...] } con un elemento — normalizamos a array
+    // v5 /codes.alpha_3/{CODE} puede devolver { data: { objects: [...] } }
     let dataArray: unknown[];
     if (raw && typeof raw === 'object' && 'data' in raw) {
-      dataArray = Array.isArray(raw.data) ? raw.data : [raw.data];
+      const dataObj = raw.data as Record<string, unknown>;
+      dataArray = Array.isArray(dataObj.objects) ? dataObj.objects : [dataObj.objects];
     } else {
       dataArray = Array.isArray(raw) ? raw : [raw];
     }
 
-    const parsed = apiResponseSchema.safeParse({ data: dataArray });
+    const parsed = apiResponseSchema.safeParse({ data: { objects: dataArray } });
 
-    if (!parsed.success || !parsed.data.data[0]) {
+    if (!parsed.success || !parsed.data.data.objects[0]) {
       throw AppError.notFound('Country', normalizedCode);
     }
 
-    const country = parsed.data.data[0];
+    const country = parsed.data.data.objects[0];
     setCache(cacheKey, country);
     return country;
   }
@@ -105,7 +107,7 @@ class CountryRepositoryImpl implements CountryRepository {
     const parsed = apiSummaryResponseSchema.safeParse(raw);
 
     if (!parsed.success) return [];
-    return parsed.data.data;
+    return parsed.data.data.objects;
   }
 
   async filterByRegion(region: string): Promise<CountrySummary[]> {
@@ -132,7 +134,7 @@ class CountryRepositoryImpl implements CountryRepository {
       throw AppError.unknown(new Error('Invalid country data from API'));
     }
 
-    return parsed.data.data;
+    return parsed.data.data.objects;
   }
 }
 

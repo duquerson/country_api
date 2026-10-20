@@ -34,7 +34,7 @@ describe('Domain - Validation Schemas (v5)', () => {
   });
 
   describe('apiSummaryResponseSchema', () => {
-    it('should parse v5 response wrapper { data: [...] }', () => {
+    it('should parse v5 response wrapper { data: { objects: [...] } }', () => {
       const validCountry = mockCountries[0];
       const summary = {
         codes: { alpha_3: validCountry.codes.alpha_3 },
@@ -44,10 +44,24 @@ describe('Domain - Validation Schemas (v5)', () => {
         population: validCountry.population,
         flag: { url_svg: validCountry.flag.url_svg, emoji: validCountry.flag.emoji },
       };
-      const response = { data: [summary] };
+      const response = { data: { objects: [summary], meta: { total: 1, count: 1, limit: 10, offset: 0, more: false } } };
       const result = schemas.apiSummaryResponseSchema.safeParse(response);
       expect(result.success).toBe(true);
-      expect(result.data?.data).toHaveLength(1);
+      expect(result.data?.data.objects).toHaveLength(1);
+    });
+
+    it('should accept empty url_svg for countries without flags', () => {
+      const summary = {
+        codes: { alpha_3: 'XXX' },
+        names: { common: 'Test Country' },
+        capitals: [],
+        region: 'Test',
+        population: 1000,
+        flag: { url_svg: '', emoji: '' },
+      };
+      const response = { data: { objects: [summary], meta: { total: 1, count: 1, limit: 10, offset: 0, more: false } } };
+      const result = schemas.apiSummaryResponseSchema.safeParse(response);
+      expect(result.success).toBe(true);
     });
   });
 
